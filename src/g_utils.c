@@ -681,7 +681,13 @@ qboolean KillBox(edict_t *ent)
 	trace_t     tr;
 
 	while (1) {
-		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, MASK_PLAYERSOLID);
+#ifdef SSP_SIAMESE_SPAWN_FIX
+		// band-aid for maps without spawn pads
+		tr = gi.trace (ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, CONTENTS_PLAYERCLIP|CONTENTS_WINDOW|CONTENTS_MONSTER);
+#else
+		tr = gi.trace (ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, MASK_PLAYERSOLID);
+#endif
+
 		if (!tr.ent) {
 			break;
 		}

@@ -1326,8 +1326,7 @@ void PutClientInServer(edict_t *ent)
 	ent->waterlevel = 0;
 	ent->watertype = 0;
 	ent->flags &= ~FL_NO_KNOCKBACK;
-	ent->svflags &= ~SVF_DEADMONSTER;
-	ent->svflags &= ~SVF_MONSTER;
+	ent->svflags = 0;  // %%BWK %%SSP r1ch R1CH - invisiblilty fix (id apparently lost this between 3.20 and 3.21)  // was: ent->svflags &= ~SVF_DEADMONSTER;
 //ponko
 	ent->client->zc.aiming = 0;
 	ent->client->zc.distance = 90;

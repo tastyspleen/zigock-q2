@@ -1,6 +1,7 @@
 // g_local.h -- local definitions for game module
 
 #include "q_shared.h"
+#include "tsmod_flags.h"
 
 #ifndef G_LOCAL
 #define G_LOCAL
