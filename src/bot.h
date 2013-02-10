@@ -295,14 +295,14 @@ void CTFJobAssign(void);        //job assign
 #define CTF_FLAG2_FLAG      0x8000
 
 typedef struct {
-    vec3_t  Pt;     //target point
-    union {
-        vec3_t          Tcourner;               //target courner(train and grap-shot only)
-        unsigned short  linkpod[MAXLINKPOD];    //(GRS_NORMAL,GRS_ITEMS only 0 = do not select pod)
-    };
-    edict_t *ent;   //target ent
-    short   index;  //index num
-    short   state;  //targetstate
+	vec3_t  Pt;     //target point
+	union {
+		vec3_t          Tcourner;               //target courner(train and grap-shot only)
+		unsigned short  linkpod[MAXLINKPOD];    //(GRS_NORMAL,GRS_ITEMS only 0 = do not select pod)
+	};
+	edict_t *ent;   //target ent
+	short   index;  //index num
+	short   state;  //targetstate
 } route_t;
 
 //----------------------------------------------------------------
@@ -329,13 +329,13 @@ typedef struct {
 #define BOP_TEAMWORK    15  //teamwork
 
 typedef struct {
-    char    netname[21];        //netname
-    char    model[21];          //model
-    char    skin[21];           //skin
-    int     spflg;              //spawned flag 0-not 1-waiting 2-spawned
-    int     team;               //team NO. 0-noteam 1-RED 2-BLUE
-    int     arena;              //if arena is on
-    unsigned char   param[MAXBOP];      //Params
+	char    netname[21];        //netname
+	char    model[21];          //model
+	char    skin[21];           //skin
+	int     spflg;              //spawned flag 0-not 1-waiting 2-spawned
+	int     team;               //team NO. 0-noteam 1-RED 2-BLUE
+	int     arena;              //if arena is on
+	unsigned char   param[MAXBOP];      //Params
 }   botinfo_t;
 
 //----------------------------------------------------------------

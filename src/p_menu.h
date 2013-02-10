@@ -6,16 +6,16 @@ enum {
 };
 
 typedef struct pmenuhnd_s {
-    struct pmenu_s *entries;
-    int cur;
-    int num;
+	struct pmenu_s *entries;
+	int cur;
+	int num;
 } pmenuhnd_t;
 
 typedef struct pmenu_s {
-    char *text;
-    int align;
-    void *arg;
-    void (*SelectFunc)(edict_t *ent, struct pmenu_s *entry);
+	char *text;
+	int align;
+	void *arg;
+	void (*SelectFunc)(edict_t *ent, struct pmenu_s *entry);
 } pmenu_t;
 
 void PMenu_Open(edict_t *ent, pmenu_t *entries, int cur, int num);

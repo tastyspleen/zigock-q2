@@ -29,103 +29,103 @@ qboolean    trail_active = false;
 
 void PlayerTrail_Init(void)
 {
-    int     n;
+	int     n;
 
-    if (deathmatch->value /* FIXME || coop */) {
-        return;
-    }
+	if (deathmatch->value /* FIXME || coop */) {
+		return;
+	}
 
-    for (n = 0; n < TRAIL_LENGTH; n++) {
-        trail[n] = G_Spawn();
-        trail[n]->classname = "player_trail";
-    }
+	for (n = 0; n < TRAIL_LENGTH; n++) {
+		trail[n] = G_Spawn();
+		trail[n]->classname = "player_trail";
+	}
 
-    trail_head = 0;
-    trail_active = true;
+	trail_head = 0;
+	trail_active = true;
 }
 
 
 void PlayerTrail_Add(vec3_t spot)
 {
-    vec3_t  temp;
+	vec3_t  temp;
 
-    if (!trail_active) {
-        return;
-    }
+	if (!trail_active) {
+		return;
+	}
 
-    VectorCopy(spot, trail[trail_head]->s.origin);
+	VectorCopy(spot, trail[trail_head]->s.origin);
 
-    trail[trail_head]->timestamp = level.time;
+	trail[trail_head]->timestamp = level.time;
 
-    VectorSubtract(spot, trail[PREV(trail_head)]->s.origin, temp);
-    trail[trail_head]->s.angles[1] = vectoyaw(temp);
+	VectorSubtract(spot, trail[PREV(trail_head)]->s.origin, temp);
+	trail[trail_head]->s.angles[1] = vectoyaw(temp);
 
-    trail_head = NEXT(trail_head);
+	trail_head = NEXT(trail_head);
 }
 
 
 void PlayerTrail_New(vec3_t spot)
 {
-    if (!trail_active) {
-        return;
-    }
+	if (!trail_active) {
+		return;
+	}
 
-    PlayerTrail_Init();
-    PlayerTrail_Add(spot);
+	PlayerTrail_Init();
+	PlayerTrail_Add(spot);
 }
 
 
 edict_t *PlayerTrail_PickFirst(edict_t *self)
 {
-    int     marker;
-    int     n;
+	int     marker;
+	int     n;
 
-    if (!trail_active) {
-        return NULL;
-    }
+	if (!trail_active) {
+		return NULL;
+	}
 
-    for (marker = trail_head, n = TRAIL_LENGTH; n; n--) {
-        if (trail[marker]->timestamp <= self->monsterinfo.trail_time) {
-            marker = NEXT(marker);
-        }
-        else {
-            break;
-        }
-    }
+	for (marker = trail_head, n = TRAIL_LENGTH; n; n--) {
+		if (trail[marker]->timestamp <= self->monsterinfo.trail_time) {
+			marker = NEXT(marker);
+		}
+		else {
+			break;
+		}
+	}
 
-    if (visible(self, trail[marker])) {
-        return trail[marker];
-    }
+	if (visible(self, trail[marker])) {
+		return trail[marker];
+	}
 
-    if (visible(self, trail[PREV(marker)])) {
-        return trail[PREV(marker)];
-    }
+	if (visible(self, trail[PREV(marker)])) {
+		return trail[PREV(marker)];
+	}
 
-    return trail[marker];
+	return trail[marker];
 }
 
 edict_t *PlayerTrail_PickNext(edict_t *self)
 {
-    int     marker;
-    int     n;
+	int     marker;
+	int     n;
 
-    if (!trail_active) {
-        return NULL;
-    }
+	if (!trail_active) {
+		return NULL;
+	}
 
-    for (marker = trail_head, n = TRAIL_LENGTH; n; n--) {
-        if (trail[marker]->timestamp <= self->monsterinfo.trail_time) {
-            marker = NEXT(marker);
-        }
-        else {
-            break;
-        }
-    }
+	for (marker = trail_head, n = TRAIL_LENGTH; n; n--) {
+		if (trail[marker]->timestamp <= self->monsterinfo.trail_time) {
+			marker = NEXT(marker);
+		}
+		else {
+			break;
+		}
+	}
 
-    return trail[marker];
+	return trail[marker];
 }
 
 edict_t *PlayerTrail_LastSpot(void)
 {
-    return trail[trail_head];
+	return trail[trail_head];
 }
