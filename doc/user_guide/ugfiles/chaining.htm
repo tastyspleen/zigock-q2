@@ -1,0 +1,115 @@
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Chaining</title>
+<script language="JavaScript" src="src/navbar.js"></script>
+<script language="JavaScript" src="src/dhtmllib.js"></script>
+</head>
+
+<body stylesrc="../3rd Zigock II Users Guide.htm" onload="navBarInit()" background="images/zigback.gif" bgproperties="fixed" bgcolor="#000000" text="#EDE689" link="#3399FF" vlink="#3399FF" alink="#EDE689">
+<p><!--webbot bot="HTMLMarkup" startspan --><script language="JavaScript">
+
+// Define navigation bar settings.
+
+navBarHeaderWidth  = 125;      // Sizes.
+navBarMenuWidth    = 125;
+navBarBorderWidth  =   1;
+navBarPaddingWidth =   1;
+
+navBarHeaderFontFamily = "sans-serif,Arial,Helvetica,Verdana";
+navBarHeaderFontStyle  = "plain";
+navBarHeaderFontWeight = "none";
+navBarHeaderFontSize   = "8pt";
+navBarItemFontFamily   = "sans-serif,Arial,Helvetica,Verdana";
+navBarItemFontStyle    = "plain";
+navBarItemFontWeight   = "none";
+navBarItemFontSize     = "8pt";
+
+// Define navigation bar menus.
+
+navBarMenus[0] = new Array("Main Page", "../3rd Zigock II Users Guide.htm",
+                           "About", "about.htm"
+                           );
+
+navBarMenus[1] = new Array("Installation", "",
+                           "Standard 3zb2", "std_install.htm",
+                           "The Reckoning Support", "rek_install.htm",
+                           "Capture The Flag Support", "ctf_install.htm"
+                          );
+
+navBarMenus[2] = new Array("Commands", "",
+                           "Config Commands", "config.htm",
+                           "Console Commands", "console.htm"
+                          );
+
+navBarMenus[3] = new Array("Advanced Use", "",
+                           "Bot Editing", "bot_edit.htm",
+                           "Chaining", "chaining.htm"
+                          );
+                          
+navBarMenus[4] = new Array("Deathmatch Calculator", "dmc.htm"
+                           );
+                          
+navBarMenus[5] = new Array("Online Links", "",
+                           "3rd Zigock II Homepage", "javascript:window.open('http://users.jp.tri6.net/~ponpoko/3zb2/')",
+                           "RsFHQ", "javascript:window.open('http://www.btinternet.com/~RsFHQ/')",
+                           "3rd Zigock II BE-OS port", "javascript:window.open('http://reality.sgi.com/rhess_engr/beos/q2/3zb2/')",
+                           "Bot Epidemic", "javascript:window.open('http://www.botepidemic.com/')",
+                           "Bot Board", "javascript:window.open('http://botboard.telefragged.com/')"                           
+                          );
+
+</script>
+<!--webbot bot="HTMLMarkup" endspan -->
+</p>
+<p>&nbsp;</p>
+<center>
+
+</center>
+
+<p align="left">If you have an existing route for the map you wish to chain in
+your chdtm folder remove this elsewhere.<br>
+DO NOT delete it incase you wish to place it back.</p>
+
+<p align="left">1. Set the value &quot;chedit&quot; to 1 from console<br>
+<br>
+<font color="#FFFFFF">chedit 1</font><br>
+<br>
+2. Restart the map like below<br>
+<br>
+<font color="#FFFFFF">map q2dm1</font><br>
+<br>
+3. Roam around the map<br>
+<br>
+4. If you use an elevator with button etc.. and you want to test it to see if a
+bot can use it correctly. then use the <font color="#FFFFFF">sv dsp</font> ? ..
+? = how many steps before the function<br>
+<br>
+&nbsp;If you want a Bot run from the last 20 steps to current pod type<br>
+<br>
+<font color="#FFFFFF">sv dsp 20</font><br>
+<br>
+If the Bot can get to current pod bot will be removed automatically .. If the
+Bot failed to trace chaining Bot will be removed automatically too.<br>
+<br>
+When do you want to take back 20 of chaining pods type<br>
+<br>
+<font color="#FFFFFF">cmd undo 20</font><br>
+<br>
+5. When your chaining is done save it as a chaining route file .. This will be
+saved file under &quot;chdtm&quot; directory as its map name ie .. q2dm8.chn<br>
+<br>
+<font color="#FFFFFF">sv savechain</font><br>
+<br>
+<font color="#FF5555" size="4"><b>caution!</b></font><br>
+don't try and do any tricky moves ( like rocket jumps or grenade jumps )<br>
+if you die ( drop to lava or slime etc ) route will be fixed to safely route.<br>
+if the bot is not automatically removed ,execute remove command. ( <font color="#FFFFFF">sv
+rmb 1</font> )</p>
+<p>&nbsp;
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Console Commands</title>
+<script language="JavaScript" src="src/navbar.js"></script>
+<script language="JavaScript" src="src/dhtmllib.js"></script>
+</head>
+
+<body stylesrc="../3rd Zigock II Users Guide.htm" onload="navBarInit()" background="images/zigback.gif" bgproperties="fixed" bgcolor="#000000" text="#EDE689" link="#3399FF" vlink="#3399FF" alink="#EDE689">
+<p><!--webbot bot="HTMLMarkup" startspan --><script language="JavaScript">
+
+// Define navigation bar settings.
+
+navBarHeaderWidth  = 125;      // Sizes.
+navBarMenuWidth    = 125;
+navBarBorderWidth  =   1;
+navBarPaddingWidth =   1;
+
+navBarHeaderFontFamily = "sans-serif,Arial,Helvetica,Verdana";
+navBarHeaderFontStyle  = "plain";
+navBarHeaderFontWeight = "none";
+navBarHeaderFontSize   = "8pt";
+navBarItemFontFamily   = "sans-serif,Arial,Helvetica,Verdana";
+navBarItemFontStyle    = "plain";
+navBarItemFontWeight   = "none";
+navBarItemFontSize     = "8pt";
+
+// Define navigation bar menus.
+
+navBarMenus[0] = new Array("Main Page", "../3rd Zigock II Users Guide.htm",
+                           "About", "about.htm"
+                           );
+
+navBarMenus[1] = new Array("Installation", "",
+                           "Standard 3zb2", "std_install.htm",
+                           "The Reckoning Support", "rek_install.htm",
+                           "Capture The Flag Support", "ctf_install.htm"
+                          );
+
+navBarMenus[2] = new Array("Commands", "",
+                           "Config Commands", "config.htm",
+                           "Console Commands", "console.htm"
+                          );
+
+navBarMenus[3] = new Array("Advanced Use", "",
+                           "Bot Editing", "bot_edit.htm",
+                           "Chaining", "chaining.htm"
+                          );
+                          
+navBarMenus[4] = new Array("Deathmatch Calculator", "dmc.htm"
+                           );
+                          
+navBarMenus[5] = new Array("Online Links", "",
+                           "3rd Zigock II Homepage", "javascript:window.open('http://users.jp.tri6.net/~ponpoko/3zb2/')",
+                           "RsFHQ", "javascript:window.open('http://www.btinternet.com/~RsFHQ/')",
+                           "3rd Zigock II BE-OS port", "javascript:window.open('http://reality.sgi.com/rhess_engr/beos/q2/3zb2/')",
+                           "Bot Epidemic", "javascript:window.open('http://www.botepidemic.com/')",
+                           "Bot Board", "javascript:window.open('http://botboard.telefragged.com/')"                           
+                          );
+
+</script>
+<!--webbot bot="HTMLMarkup" endspan -->
+</p>
+<p>&nbsp;</p>
+
+<p align="left"><font>This is a preview of the commands in 3zbII
+although most of them will be setup already in the Game.cfg&nbsp;<br>
+Some the Commands are for advanced use and will be marked with a &quot; <font color="#ff0000">*</font>
+&quot;<br>
+These will be explained in greater detail in &quot;Advanced Use&quot; section ...</font></p>
+<p align="left">Console Value (All modification for this values
+will activate when restart the map)<br>
+<font color="#FFFFFF">cl_ vweap
+</font>Visible weapon on/off (default on = 1,off =
+0)<br>
+<br>
+<font color="#FFFFFF">maplist</font>  set the maplist section name(default =
+&quot;default&quot;)<br>
+<br>
+<font color="#FFFFFF">autospawn</font>   Autospawn on/off(default off = 0,on =
+1) bots will spawn automatically when set the value to 1<font color="#ff0000">*</font><br>
+<br>
+<font color="#FFFFFF">chedit</font>&nbsp; Chaining mode on/off (default off =
+0,on = 1)</p>
+
+<p>
+<font color="#FFFFFF">deathmatch </font>Deathmatch mode (1=on 0=off)</p>
+<p><font color="#FFFFFF">ctf </font>CTF mode (1=on 0=off)</p>
+<p><font color="#FFFFFF">drop tech</font> bind this to a key to drop ctf techs
+i.e. <font color="#FFFFFF">bind t &quot;drop tech&quot;</font><br>
+<br>
+<font color="#FFFFFF">zigmode</font> Flag keeper mode on/off (default off = 0,on
+= 1)<br>
+<br>
+<font color="#FFFFFF">spectator</font> set the spectator mode on/off (default
+off = 0,on = 1)<br>
+<br>
+<font color="#FFFFFF">botlist</font> set the botlist section name(default =
+&quot;default&quot;)<br>
+<br>
+<font color="#FFFFFF">ctf</font>&nbsp; (not supported yet) CTF mode on/off
+(default off = 0,on = 1)...(not yet)<br>
+<br>
+<font color="#FFFFFF">skill</font> (not activated yet) Skill Setting(0-9).<br>
+<br>
+<font color="#FFFFFF">spectator</font><font color="#000000">&nbsp; </font>1 or 0&nbsp;
+.. fire button-catch and release &amp; [ or ] button-select target<br>
+<br>
+Server Command ( will be active right away&nbsp; )<br>
+<font color="#FFFFFF">sv spb $</font> ...spawn number of bots (I use a Max of 12
+.. well you gota have time to get a gun!)<br>
+<font color="#FFFFFF">sv rmb $</font> ...remove number of bots<br>
+<font color="#FFFFFF">sv dsp $</font> ...debug spawning,to make bot running from
+<font color="#FFFFFF">$</font> counted old position <font color="#ff0000">*</font><br>
+<font color="#FFFFFF">sv savechain</font> save the chaining route file <font color="#ff0000">*</font><br>
+<br>
+<br>
+-Client Command ( will be active right away )<br>
+<font color="#FFFFFF">cmd undo $</font> take back <font color="#FFFFFF">$</font>
+( nunber ) of&nbsp; pods <font color="#ff0000">*</font></p>
+
+<p>&nbsp;
+</body>
+
+</html>

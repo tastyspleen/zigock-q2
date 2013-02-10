@@ -1,0 +1,182 @@
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Launching</title>
+<script language="JavaScript" src="src/navbar.js"></script>
+<script language="JavaScript" src="src/dhtmllib.js"></script></head>
+
+<body stylesrc="../3rd Zigock II Users Guide.htm" onload="navBarInit()" background="images/zigback.gif" bgproperties="fixed" bgcolor="#000000" text="#EDE689" link="#3399FF" vlink="#3399FF" alink="#EDE689">
+<p><!--webbot bot="HTMLMarkup" startspan --><script language="JavaScript">
+
+// Define navigation bar settings.
+
+navBarHeaderWidth  = 125;      // Sizes.
+navBarMenuWidth    = 125;
+navBarBorderWidth  =   1;
+navBarPaddingWidth =   1;
+
+navBarHeaderFontFamily = "sans-serif,Arial,Helvetica,Verdana";
+navBarHeaderFontStyle  = "plain";
+navBarHeaderFontWeight = "none";
+navBarHeaderFontSize   = "8pt";
+navBarItemFontFamily   = "sans-serif,Arial,Helvetica,Verdana";
+navBarItemFontStyle    = "plain";
+navBarItemFontWeight   = "none";
+navBarItemFontSize     = "8pt";
+
+// Define navigation bar menus.
+
+navBarMenus[0] = new Array("Main Page", "../3rd Zigock II Users Guide.htm",
+                           "About", "about.htm"
+                           );
+
+navBarMenus[1] = new Array("Installation", "",
+                           "Standard 3zb2", "std_install.htm",
+                           "The Reckoning Support", "rek_install.htm",
+                           "Capture The Flag Support", "ctf_install.htm"
+                          );
+
+navBarMenus[2] = new Array("Commands", "",
+                           "Config Commands", "config.htm",
+                           "Console Commands", "console.htm"
+                          );
+
+navBarMenus[3] = new Array("Advanced Use", "",
+                           "Bot Editing", "bot_edit.htm",
+                           "Chaining", "chaining.htm"
+                          );
+                          
+navBarMenus[4] = new Array("Deathmatch Calculator", "dmc.htm"
+                           );
+                          
+navBarMenus[5] = new Array("Online Links", "",
+                           "3rd Zigock II Homepage", "javascript:window.open('http://users.jp.tri6.net/~ponpoko/3zb2/')",
+                           "RsFHQ", "javascript:window.open('http://www.btinternet.com/~RsFHQ/')",
+                           "3rd Zigock II BE-OS port", "javascript:window.open('http://reality.sgi.com/rhess_engr/beos/q2/3zb2/')",
+                           "Bot Epidemic", "javascript:window.open('http://www.botepidemic.com/')",
+                           "Bot Board", "javascript:window.open('http://botboard.telefragged.com/')"                           
+                          );
+
+</script>
+<!--webbot bot="HTMLMarkup" endspan -->
+
+<script LANGUAGE="JavaScript">
+<!--
+/*
+By [H]
+*/
+
+function pad(anystr) {
+        document.calc.shownum.value += anystr
+}
+
+function calcit() {
+        document.calc.shownum.value = eval(document.calc.shownum.value)
+}
+
+function clearit() {
+        document.calc.shownum.value = ""
+}
+
+function backspace() {
+        curvalue = document.calc.shownum.value
+        curlength = curvalue.length
+        curvalue = curvalue.substring(0,curlength-1)
+        document.calc.shownum.value = curvalue
+}
+-->
+</script>
+
+<p>&nbsp;
+<p>&nbsp;
+
+<div align="left">
+  <table border="2" bgcolor="#000000" bordercolorlight="#c0c0c0" bordercolordark="#c0c0c0" bordercolor="#c0c0c0" cellpadding="3">
+    <tr>
+      <td colspan="3" valign="top" align="left" bordercolor="#000000" bordercolorlight="#000000" bordercolordark="#000000" width="540" height="37">
+<form NAME="calc">
+   <form>
+   <div align="left">
+    <table border="1" cellspacing="3" bgcolor="#000000" bordercolorlight="#000000" bordercolordark="#000000" bordercolor="#808080" align="left">
+        <TBODY style="FONT-FAMILY: sans-serif; FONT-SIZE: medium; FONT-WEIGHT: bold" 
+       >
+      <tr>
+        <td valign="center" align="left" bgcolor="#000000" bordercolor="#000000" bordercolorlight="#000000" bordercolordark="#000000">
+<font face="System"><font color="#0066FF"><!--webbot bot="HTMLMarkup" startspan --><FONT SIZE='-1'>RsFHQ &#169;1999 All rights reserved.</FONT><!--webbot
+bot="HTMLMarkup" endspan -->
+</font>
+<br>
+<input NAME="shownum" MAXLENGTH ="25" SIZE="50" style="height: 22; width: 523" 
+       ></font>
+        </td>
+      </tr>
+        </TBODY>
+    </table>
+   </div>
+
+</form>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" align="left" bordercolor="#000000" bordercolorlight="#000000" bordercolordark="#000000" height="193">
+<p><font face="System" size="1"><br>
+<input type="button" value="  1  "
+ onclick="javascript:pad('+1');" style="WIDTH: 55px" width="55">DF_NO_HEALTH<br>
+<input type="button" value="  2  "
+ onclick="javascript:pad('+2');" style="WIDTH: 55px" width="55">DF_NO_ITEMS<br>
+<input type="button" value="  4  "
+ onclick="javascript:pad('+4');" style="WIDTH: 55px" width="55">DF_WEAPONS_STAY<br>
+<input type="button" value="  8  "
+ onclick="javascript:pad('+8');" style="WIDTH: 55px" width="55">DF_NO_FALLING<br>
+<input type="button" value="  16  "
+ onclick="javascript:pad('+16');" style="WIDTH: 55px" width="55">DF_INSTANT_ITEMS<br>
+<input type="button" value="  32  "
+ onclick="javascript:pad('+32');" style="WIDTH: 55px" width="55">DF_SAME_LEVEL<br>
+<input type="button" value="  64  "
+ onclick="javascript:pad('+64');" style="HEIGHT: 24px; WIDTH: 55px" width="55" height="24">DF_SKINTEAMS<br>
+<input type="button" value=" 128 "
+ onclick="javascript:pad('+128');" style="WIDTH: 55px" width="55">DF_MODELTEAMS<br>
+<input type="button" value=" 256 "
+ onclick="javascript:pad('+256');" style="WIDTH: 55px" width="55">DF_NO_FRIENDLY_FIRE
+</font></p>
+      </td>
+      <td valign="top" align="left" bordercolor="#000000" bordercolorlight="#000000" bordercolordark="#000000" height="219">
+<font face="System" size="1"><br>
+<input type="button" value=" 512 "
+ onclick="javascript:pad('+512');" style="WIDTH: 55px" width="55">DF_SPAWN_FARTHEST<br>
+<input type="button" value=" 1024 "
+ onclick="javascript:pad('+1024');" style="WIDTH: 55px" width="55">DF_FORCE_RESPAWN<br>
+<input type="button" value=" 2048 "
+ onclick="javascript:pad('+2048');" style="WIDTH: 55px" width="55">DF_NO_ARMOR<br>
+<input type="button" value=" 4096 "
+ onclick="javascript:pad('+4096');" style="WIDTH: 55px" width="55">DF_ALLOW_EXIT<br>
+<input type="button" value=" 8192 "
+ onclick="javascript:pad('+8192');" style="WIDTH: 55px" width="55">DF_INFINITE_AMMO<br>
+<input type="button" value="16384"
+ onclick="javascript:pad('+16384');" style="WIDTH: 55px" width="55">DF_QUAD_DROP<br>
+<input type="button" value="32768"
+ onclick="javascript:pad('+32768');" style="WIDTH: 55px" width="55">DF_FIXED_FOV<br>
+<input type="button" value="65536"
+ onclick="javascript:pad('+65536');" style="WIDTH: 55px" width="55">DF_QUADFIRE_DROP<br>
+<input type="button" value="262144"
+ onclick="javascript:pad('+262144');" style="WIDTH: 55px" width="55">DF_ARMOR_PROTECT</font>
+      </td>
+      <td valign="top" align="left" bordercolor="#000000" bordercolorlight="#000000" bordercolordark="#000000" height="219">
+<font face="System"><br>
+<br>
+<input type="button" value="  Restart "
+ onclick="javascript:clearit();" style="font-weight: bold; height: 66; width: 90" width="151"><br>
+<br>
+<input type="button" value="  =  "
+ onclick="javascript:calcit();" style="width: 90; height: 108" width="98"></font>
+      </td>
+    </tr>
+  </table>
+  </div>
+</body>
+
+</html>

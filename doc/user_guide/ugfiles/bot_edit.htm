@@ -1,0 +1,188 @@
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Bot Editing</title>
+<script language="JavaScript" src="src/navbar.js"></script>
+<script language="JavaScript" src="src/dhtmllib.js"></script>
+</head>
+
+<body stylesrc="../3rd Zigock II Users Guide.htm" onload="navBarInit()" background="images/zigback.gif" bgproperties="fixed" bgcolor="#000000" text="#EDE689" link="#3399FF" vlink="#3399FF" alink="#EDE689">
+<p><!--webbot bot="HTMLMarkup" startspan --><script language="JavaScript">
+
+// Define navigation bar settings.
+
+navBarHeaderWidth  = 125;      // Sizes.
+navBarMenuWidth    = 125;
+navBarBorderWidth  =   1;
+navBarPaddingWidth =   1;
+
+navBarHeaderFontFamily = "sans-serif,Arial,Helvetica,Verdana";
+navBarHeaderFontStyle  = "plain";
+navBarHeaderFontWeight = "none";
+navBarHeaderFontSize   = "8pt";
+navBarItemFontFamily   = "sans-serif,Arial,Helvetica,Verdana";
+navBarItemFontStyle    = "plain";
+navBarItemFontWeight   = "none";
+navBarItemFontSize     = "8pt";
+
+// Define navigation bar menus.
+
+navBarMenus[0] = new Array("Main Page", "../3rd Zigock II Users Guide.htm",
+                           "About", "about.htm"
+                           );
+
+navBarMenus[1] = new Array("Installation", "",
+                           "Standard 3zb2", "std_install.htm",
+                           "The Reckoning Support", "rek_install.htm",
+                           "Capture The Flag Support", "ctf_install.htm"
+                          );
+
+navBarMenus[2] = new Array("Commands", "",
+                           "Config Commands", "config.htm",
+                           "Console Commands", "console.htm"
+                          );
+
+navBarMenus[3] = new Array("Advanced Use", "",
+                           "Bot Editing", "bot_edit.htm",
+                           "Chaining", "chaining.htm"
+                          );
+                          
+navBarMenus[4] = new Array("Deathmatch Calculator", "dmc.htm"
+                           );
+                          
+navBarMenus[5] = new Array("Online Links", "",
+                           "3rd Zigock II Homepage", "javascript:window.open('http://users.jp.tri6.net/~ponpoko/3zb2/')",
+                           "RsFHQ", "javascript:window.open('http://www.btinternet.com/~RsFHQ/')",
+                           "3rd Zigock II BE-OS port", "javascript:window.open('http://reality.sgi.com/rhess_engr/beos/q2/3zb2/')",
+                           "Bot Epidemic", "javascript:window.open('http://www.botepidemic.com/')",
+                           "Bot Board", "javascript:window.open('http://botboard.telefragged.com/')"                           
+                          );
+
+</script>
+<!--webbot bot="HTMLMarkup" endspan -->
+<p>
+<center>
+
+&nbsp;
+
+</center>
+<p align="left">Bots are found in the 3ZBConfig.cfg<br>To make your configure the bots to suit your skill you have 15
+parameters to influence their prowess.<br>
+These follow a simple formula :</p>
+<p align="left"><font color="#FFFFFF">netname \ model \ skin \ parameters 0 to15
+\ team \ autospawnflag</font><br>
+<font color="#FFFFFF">\\claw finger \male \claymore
+\0\9\8\4\7\1\5\100\100\10\5\1\1\1\1\8 \R \1</font></p>
+<p><font color="#0066FF">
+netname</font> = bot's name<br>
+<font color="#0066FF">
+model</font> = modelname<br>
+<font color="#0066FF">
+skin</font> = skinname<br>
+<font color="#0066FF">
+param0</font> = walking flag (0 - 1) 1-walk 0-always run<br>
+<font color="#0066FF">
+param1</font> = aiming skill level (0 - 9) high-hard aiming<br>
+<font color="#0066FF">
+param2</font> = frq. of pickup items (0 - 9) high-mania<br>
+<font color="#0066FF">
+param3</font> = character type (0 - 9) high-offensive low-defensive<br>
+<font color="#0066FF">
+param4</font> = combat skill (0 - 9) high-professional<br>
+<font color="#0066FF">
+param5</font> = rocket jump flag (0 - 1) 1-on 0-off<br>
+<font color="#0066FF">
+param6</font> = reaction skill (0 - 9) high-high reaction skill<br>
+<font color="#0066FF">
+param7</font> = vertical view range (10 - 180) degrees (abs)<br>
+<font color="#0066FF">
+param8</font> = horizontal view range (10 - 180) degrees (abs)<br>
+<font color="#0066FF">
+param9</font> = primary weapon (0 - 13) 0-none<br>
+<font color="#0066FF">
+param10</font> = secondary weapon (0 - 13) 0-none<br>
+<font color="#0066FF">
+param11</font> = dodge (dependent on combat skill) (0 - 1) 1-On, 0-Off<br>
+<font color="#0066FF">
+param12</font> = estimate (need to activate param 13) (0 - 1) 1-On, 0-Off<br>
+<font color="#0066FF">
+param13</font> = enemy's noise check (0 - 1) 1-On, 0-Off<br>
+<font color="#0066FF">
+param14</font> = can't see through water (0 - 1) 1-On, 0-Off<br>
+<font color="#0066FF">
+param15</font> = teamworking (0-9) 0-minimal teamwork, 9-maximum teamwork<br>
+<font color="#0066FF">
+team</font> &lt;team&gt; ie.. team R (R or B only in CTF mode)<br>
+<font color="#0066FF">
+autospawnflag</font> autospawning flag(1 or 0)<br>
+<br>
+primary and secondary weapons .. Now This is a cool part of the AI, say a bot
+was set on 10/05, Railgun/Chaingun ..<br>
+Then if he hits you with a railshot he has combatskill% chance of selecting the
+chaingun to finish you off ..<br>
+The weapon numbers are as follows :</p>
+<ul>
+  <li>
+    <p><font color="#0066FF">0</font> = Random</li>
+  <li>
+    <p align="left"><font color="#0066FF">1</font> = Blaster</li>
+  <li>
+    <p align="left"><font color="#0066FF">2</font> = Shot Gun</li>
+  <li>
+    <p align="left"><font color="#0066FF">3</font> = Super Shotgun</li>
+  <li>
+    <p align="left"><font color="#0066FF">4</font> = Machine Gun</li>
+  <li>
+    <p align="left"><font color="#0066FF">5</font> = Chain Gun</li>
+  <li>
+    <p align="left"><font color="#0066FF">6</font> = Hand Grenade</li>
+  <li>
+    <p align="left"><font color="#0066FF">7</font> = Grenade Launcher</li>
+  <li>
+    <p align="left"><font color="#0066FF">8</font> = Rocket Launcher</li>
+  <li>
+    <p align="left"><font color="#0066FF">9</font> = Hyper Blaster</li>
+  <li>
+    <p align="left"><font color="#0066FF">10</font> = Rail Gun</li>
+  <li>
+    <p align="left"><font color="#0066FF">11</font> = BFG10K&nbsp;</li>
+  <li>
+    <p align="left"><font color="#0066FF">12</font> = Plasma Gun</li>
+  <li>
+    <p align="left"><font color="#0066FF">13</font> = Ion Ripper</li>
+</ul>
+<p align="left"><font color="#FFFFFF">netname \ model \ skin \ param0 to param15
+\ team \ autospawnflag</font><br>
+<br>
+<font color="#FFFFFF">\\claw finger \male \claymore
+\0\9\9\7\9\1\9\180\180\10\5\1\1\1\1\8 \R \1</font><br>
+This Example is of a pro bot setup with 180 180 vision ..oh!</p>
+<p align="left"><font color="#FFFFFF">\\claw finger \male \claymore
+\0\5\7\5\5\0\5\90\90\0\0\0\0\0\0\1 \R \1</font><font color="#000000"><br>
+</font>This Example is of an Average Bot ..Phew!<br>
+Dont have the bot to Easy or your skill will not improve as much, due to less
+pressure.</p>
+<p align="left">A Duel ... 1 on 1 on q2dm1 is a good way of perfecting your
+skills against a pro bot.<br>
+As you find your self able to stay alive 9 out of
+10 kills it's time for 2 :¬)</p>
+
+<p align="left">To make your custom botslist you must first set them a name so
+they can be read by 3zb2,<br>
+to do
+this it must be set between [ &amp; ] i.e.</p>
+
+<p align="left">[mybots]<br>
+<font color="#FFFFFF">\claw finger \male \claymore
+\0\5\7\5\5\0\5\90\90\0\0\0\0\0\0\1 \R \1<br>
+\anotherbot \male \claymore
+\0\5\7\5\5\0\5\90\90\0\0\0\0\0\0\1 \R \1</font></p>
+<p align="left">You can go up to 64bots per botlist (a bit mad though!).</p>
+
+</body>
+
+</html>

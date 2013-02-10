@@ -1,0 +1,35 @@
+3rd-Zigock Bot II Quickstart By 006.9[RsF]
+
+Quickstart Files... 
+
+Run 3ZBII.pif
+3zb2.bat
+Addbot.cfg
+game.cfg
+3ZBII Quickstart Guide.txt 
+
+All the above files should be in the 3ZB2 folder
+
+Instructions
+
+
+the game.cfg contains the game settings, ie..dmflags, timelimit ect..and contains some info..
+
+1.. Start the game using the "Run 3ZBII" shortcut
+    once the map has started
+2.. press the numberpad + to select the number of bots you wish to add and then
+3.. press the numberpad Enter to insert then into the game
+
+to add more than 8 just go through steps 2 and 3. So if you would like 12 
+select 8 and then 4
+
+to remove bots
+
+1.. press the numberpad - to select the number of bots you wish to remove and then
+2.. press the numberpad Enter to remove the bots from the game
+
+if you ever have a problem with the keys not binding to the keypad - + and enter then bring
+down the console and type 
+exec addbot.cfg
+this will rebind these 3 keys ..
+
