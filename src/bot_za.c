@@ -1285,7 +1285,7 @@ int Bot_moveT(edict_t *ent, float ryaw, vec3_t pos, float dist, float *bottom)
         if (rs_trace.contents & contents) {
             *bottom = -9999;    /*return false;*/
         }
-        else if (rs_trace.surface->flags & SURF_SKY) {
+        else if (rs_trace.surface && (rs_trace.surface->flags & SURF_SKY)) {
             *bottom = -9999;
         }
 
