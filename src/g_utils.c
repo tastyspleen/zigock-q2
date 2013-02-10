@@ -375,6 +375,7 @@ void G_InitEdict(edict_t *e)
     e->classname = "noclass";
     e->gravity = 1.0;
     e->s.number = e - g_edicts;
+	e->freetime = level.time;  // tsmod: time now also marked at init, for emergency reclaim logic
 }
 
 /*
@@ -392,20 +393,28 @@ edict_t *G_Spawn(void)
 {
     int         i;
     edict_t     *e;
+	int			attempt;
+	const int	MAX_ATTEMPTS = 2;
 
-    e = &g_edicts[(int)maxclients->value + 1];
-    for (i = maxclients->value + 1 ; i < globals.num_edicts ; i++, e++) {
-        // the first couple seconds of server time can involve a lot of
-        // freeing and allocating, so relax the replacement policy
-        if (!e->inuse && (e->freetime < 2 || level.time - e->freetime > 0.5)) {
-            G_InitEdict(e);
-            return e;
-        }
-    }
+	for (attempt = 1; attempt <= MAX_ATTEMPTS; ++attempt) {
+		qboolean permit_recently_freed = (attempt > 1);
 
-    if (i == game.maxentities) {
-        gi.error("ED_Alloc: no free edicts");
-    }
+		i = (int)maxclients->value + 1;
+		e = &g_edicts[i];
+		for ( ; i < globals.num_edicts ; i++, e++) {
+			// the first couple seconds of server time can involve a lot of
+			// freeing and allocating, so relax the replacement policy
+			// tsmod: emergency allow reclaiming any free entity on second pass
+			if (!e->inuse && (permit_recently_freed || (e->freetime < 2 || level.time - e->freetime > 0.5))) {
+				G_InitEdict(e);
+				return e;
+			}
+		}
+	}
+
+	if (i >= game.maxentities) {
+		gi.error("ED_Alloc: no free edicts");
+	}
 
     globals.num_edicts++;
     G_InitEdict(e);
@@ -432,6 +441,97 @@ void G_FreeEdict(edict_t *ed)
     ed->classname = "freed";
     ed->freetime = level.time;
     ed->inuse = false;
+}
+
+/* (tsmod)
+=================
+emergencyReclaimNonessentialEntity
+
+Free oldest inUse entity considered nonessential.
+=================
+*/
+#define MAX_RECLAIM_SEVERITY 2
+
+static qboolean entityIsNonessential(const edict_t *e, int severity)
+{
+	qboolean is_gib = ((e->s.effects & EF_GIB) && e->think == G_FreeEdict);
+	qboolean is_dropped_item = (e->spawnflags & DROPPED_ITEM) && !(e->spawnflags & DROPPED_PLAYER_ITEM);
+	qboolean is_missile = (e->movetype == MOVETYPE_FLYMISSILE && e->think == G_FreeEdict);
+	return is_gib || ((severity > 0) && is_dropped_item) || ((severity > 1) && is_missile);
+}
+
+static edict_t *emergencyReclaimNonessentialEntity(int severity)
+{
+    int         i;
+    edict_t     *e;
+	edict_t		*nonessential = NULL;
+
+	i = (int)maxclients->value + BODY_QUEUE_SIZE + 1;
+	e = &g_edicts[i];
+	for ( ; i < globals.num_edicts ; i++, e++) {
+		if (! e->inuse)
+			continue;
+
+		if (entityIsNonessential(e, severity)) {
+			if (nonessential == NULL  ||  (e->freetime < nonessential->freetime)) {
+				nonessential = e;
+			}
+		}
+	}
+
+	if (nonessential != NULL) {
+		gi.dprintf("reclaiming nonessential entity %d severity %d age %f\n", (int)(nonessential - g_edicts), severity, (float)(level.time - nonessential->freetime));
+
+		G_FreeEdict(nonessential);
+	}
+
+	return nonessential;
+}
+
+/* (tsmod)
+=================
+G_EmergencyMaintainMinimumFreeEntityPool
+
+Intended to be called by G_RunFrame, maintains <pool_size> free edicts
+by freeing what are considered to be nonessential entities, as necessary.
+The idea is to maintain sufficient free edicts per frame that G_Spawn
+never hits the fatal ED_Alloc error.
+
+The reason we don't call EmergencyReclaimNonessentialEntity on-demand
+from within G_Spawn is that we don't know what entity pointers might be
+referenced on the caller's stack, and we don't want to free something
+that might be being manipulated. Instead, the assumption is that doing
+the work from G_RunFrame is safer, since we can guarantee that at least
+no entity pointers are being manipulated by any caller.
+=================
+*/
+void G_EmergencyMaintainMinimumFreeEntityPool(int pool_size)
+{
+	int severity;
+
+	for (severity = 0; severity <= MAX_RECLAIM_SEVERITY; ++severity) {
+		for (;;) {
+			edict_t *freed;
+
+			int num_free = (game.maxentities - globals.num_edicts);
+			if (num_free >= pool_size) {
+				return;
+			}
+
+			freed = emergencyReclaimNonessentialEntity(severity);
+			if (freed == NULL) {
+				gi.dprintf("Warning: insufficient nonessential for emergency edict pool @ severity %d (have %d want %d)\n", severity, num_free, pool_size);
+				break;
+			}
+		}
+	}
+}
+
+qboolean G_EntityUseNearEmergencyThreshold(void)
+{
+	const int pool_proximity_threshold = 32;  // arbitrary
+	int num_free = (game.maxentities - globals.num_edicts);
+	return num_free < (EMERGENCY_ENTITY_FREE_POOL_SIZE + pool_proximity_threshold);
 }
 
 

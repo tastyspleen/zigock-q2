@@ -382,22 +382,22 @@ typedef struct {
     // fixed data
     vec3_t      start_origin;
     vec3_t      start_angles;
-    vec3_t      end_origin;         //BFG‚Ìƒ^[ƒQƒbƒgƒ|ƒCƒ“ƒg‚É•s³g—p
+    vec3_t      end_origin;         //BFGï¿½Ìƒ^ï¿½[ï¿½Qï¿½bï¿½gï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½É•sï¿½ï¿½ï¿½gï¿½p
     vec3_t      end_angles;
 
-    int         sound_start;        //ƒXƒiƒCƒp[‚ÌƒAƒNƒeƒBƒx[ƒgƒtƒ‰ƒO
+    int         sound_start;        //ï¿½Xï¿½iï¿½Cï¿½pï¿½[ï¿½ÌƒAï¿½Nï¿½eï¿½Bï¿½xï¿½[ï¿½gï¿½tï¿½ï¿½ï¿½O
     int         sound_middle;
-    int         sound_end;          //hokuto‚ÌƒNƒ‰ƒX
+    int         sound_end;          //hokutoï¿½ÌƒNï¿½ï¿½ï¿½X
 
     float       accel;
-    float       speed;              //bot —‰º‚ÌˆÚ“®—Ê‚É•s³g—p
-    float       decel;              //…–Ê‘ØİŠÔ‚É•s³g—p
-    float       distance;           //ƒXƒiƒCƒp[—pFOV’l
+    float       speed;              //bot ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½ï¿½Ê‚É•sï¿½ï¿½ï¿½gï¿½p
+    float       decel;              //ï¿½ï¿½ï¿½Ê‘Øİï¿½ï¿½Ô‚É•sï¿½ï¿½ï¿½gï¿½p
+    float       distance;           //ï¿½Xï¿½iï¿½Cï¿½pï¿½[ï¿½pFOVï¿½l
 
     float       wait;
 
     // state data
-    int         state;              //CTFƒXƒe[ƒ^ƒX‚É•s³g—p
+    int         state;              //CTFï¿½Xï¿½eï¿½[ï¿½^ï¿½Xï¿½É•sï¿½ï¿½ï¿½gï¿½p
     vec3_t      dir;
     float       current_speed;
     float       move_speed;
@@ -652,6 +652,11 @@ void Touch_Item(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 //
 // g_utils.c
 //
+
+// tsmod: somewhat arbitrary, but pool should be more than would
+// be created in a single frame (aiming for supporting maxclients=128)
+#define EMERGENCY_ENTITY_FREE_POOL_SIZE		(128+32)
+
 qboolean    KillBox(edict_t *ent);
 void    G_ProjectSource(vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 edict_t *G_Find(edict_t *from, int fieldofs, char *match);
@@ -663,6 +668,8 @@ void    G_SetMovedir(vec3_t angles, vec3_t movedir);
 void    G_InitEdict(edict_t *e);
 edict_t *G_Spawn(void);
 void    G_FreeEdict(edict_t *e);
+void	G_EmergencyMaintainMinimumFreeEntityPool(int pool_size);
+qboolean G_EntityUseNearEmergencyThreshold(void);
 
 void    G_TouchTriggers(edict_t *ent);
 void    G_TouchSolids(edict_t *ent);
@@ -913,14 +920,14 @@ typedef struct zgcl_s
 {
     int         zclass;         //class no.
 
-// true client—p zoom ƒtƒ‰ƒO
+// true clientï¿½p zoom ï¿½tï¿½ï¿½ï¿½O
     int         aiming;         //0-not 1-aiming  2-firing zoomingflag
-    float       distance;       //zoom’†‚ÌFOV’l
-    float       olddistance;    //‹Œzooming FOV’l
+    float       distance;       //zoomï¿½ï¿½ï¿½ï¿½FOVï¿½l
+    float       olddistance;    //ï¿½ï¿½zooming FOVï¿½l
     qboolean    autozoom;       //autozoom
     qboolean    lockon;         //lockon flag false-not true-locking
 
-// bot—p
+// botï¿½p
     int         zcstate;        //status
 
     int         botskill;       //skill

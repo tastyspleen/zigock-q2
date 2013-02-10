@@ -86,9 +86,9 @@ void BotEndServerFrame(edict_t *ent);
 void Bots_Move_NORM(edict_t *ent);      //normal AI
 
 //spawn
-void SetBotFlag1(edict_t *ent); //ƒ`[ƒ€1‚ÌŠø
-void SetBotFlag2(edict_t *ent);  //ƒ`[ƒ€2‚ÌŠø
-void CTFSetupNavSpawn();    //ƒiƒr‚Ìİ’u
+void SetBotFlag1(edict_t *ent); //ï¿½`ï¿½[ï¿½ï¿½1ï¿½ÌŠï¿½
+void SetBotFlag2(edict_t *ent);  //ï¿½`ï¿½[ï¿½ï¿½2ï¿½ÌŠï¿½
+void CTFSetupNavSpawn();    //ï¿½iï¿½rï¿½Ìİ’u
 
 //ctf
 void CTFJobAssign(void);        //job assign
@@ -208,27 +208,27 @@ void CTFJobAssign(void);        //job assign
 #define FIRE_CHIKEN         0x00000008  //X chiken fire
 #define FIRE_RUSH           0x00000010  //X rush
 #define FIRE_JUMPNRUSH      0x00000020  //
-#define FIRE_ESTIMATE       0x00000040  //X estimate —\‘ª
-#define FIRE_SCATTER        0x00000080  //scatter ƒoƒ‰T‚«
+#define FIRE_ESTIMATE       0x00000040  //X estimate ï¿½\ï¿½ï¿½
+#define FIRE_SCATTER        0x00000080  //scatter ï¿½oï¿½ï¿½ï¿½Tï¿½ï¿½
 #define FIRE_RUNNIN         0x00000100  //run & shot(normal)
-#define FIRE_JUMPROC        0x00000200  //X ƒWƒƒƒ“ƒv‚Ó‚Ÿ‚¢‚ 
+#define FIRE_JUMPROC        0x00000200  //X ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ó‚ï¿½ï¿½ï¿½ï¿½ï¿½
 
-#define FIRE_REFUGE         0x00001000  //X ”ğ“ï
-#define FIRE_EXPAVOID       0x00002000  //X ”š”­‚æ‚¯
+#define FIRE_REFUGE         0x00001000  //X ï¿½ï¿½ï¿½
+#define FIRE_EXPAVOID       0x00002000  //X ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¯
 
-#define FIRE_QUADUSE        0x00004000  //X Quad‚Ì˜AË•Ší‘I‘ğ
-#define FIRE_AVOIDINV       0x00008000  //X ‘Šè‚ªƒyƒ“ƒ^‚Ì“¦‚°‚é
+#define FIRE_QUADUSE        0x00004000  //X Quadï¿½ï¿½ï¿½Ì˜Aï¿½Ë•ï¿½ï¿½ï¿½Iï¿½ï¿½
+#define FIRE_AVOIDINV       0x00008000  //X ï¿½ï¿½ï¿½è‚ªï¿½yï¿½ï¿½ï¿½^ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-#define FIRE_BFG            0x00010000  //X •’Ê‚ÉBFG‚ğŒ‚‚Â
+#define FIRE_BFG            0x00010000  //X ï¿½ï¿½ï¿½Ê‚ï¿½BFGï¿½ï¿½ï¿½ï¿½ï¿½
 
-#define FIRE_SHIFT_R        0x00020000  //X ‰EƒXƒ‰ƒCƒh
-#define FIRE_SHIFT_L        0x00040000  //X ¶ƒXƒ‰ƒCƒh
+#define FIRE_SHIFT_R        0x00020000  //X ï¿½Eï¿½Xï¿½ï¿½ï¿½Cï¿½h
+#define FIRE_SHIFT_L        0x00040000  //X ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½h
 
-#define FIRE_SHIFT          (FIRE_SHIFT_R | FIRE_SHIFT_L)//X ‰EƒXƒ‰ƒCƒh
+#define FIRE_SHIFT          (FIRE_SHIFT_R | FIRE_SHIFT_L)//X ï¿½Eï¿½Xï¿½ï¿½ï¿½Cï¿½h
 
-#define FIRE_REFLECT        0x00080000  // •Ç‚É”½Ë‚³‚¹‚é
+#define FIRE_REFLECT        0x00080000  // ï¿½Ç‚É”ï¿½ï¿½Ë‚ï¿½ï¿½ï¿½ï¿½ï¿½
 
-#define FIRE_IGNORE         0x10000000  //–³‹‚µ‚Ä“¦‚°‚é
+#define FIRE_IGNORE         0x10000000  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä“ï¿½ï¿½ï¿½ï¿½ï¿½
 
 // means of death
 
@@ -307,7 +307,7 @@ typedef struct {
 
 //----------------------------------------------------------------
 //bot info struct
-#define MAXBOTS     64
+#define MAXBOTS     128		//tsmod: high values depend on new emergency edict free pool
 #define MAXBOP      16
 
 // bot params
@@ -318,8 +318,8 @@ typedef struct {
 #define BOP_COMBATSKILL 4   //combat skill
 #define BOP_ROCJ        5   //rocket jump
 #define BOP_REACTION    6   //reaction skill exp. frq SEARCH ENEMY
-#define BOP_VRANGE      7   //V-View of RANGE   c
-#define BOP_HRANGE      8   //H-View of Range   ‰¡
+#define BOP_VRANGE      7   //V-View of RANGE   ï¿½c
+#define BOP_HRANGE      8   //H-View of Range   ï¿½ï¿½
 #define BOP_PRIWEP      9   //primary weapon
 #define BOP_SECWEP      10  //secondary weapon
 #define BOP_DODGE       11  //dodge

@@ -294,8 +294,9 @@ edict_t *Get_NewClient(void)
     edict_t     *e;
     gclient_t   *client;
 
-    e = &g_edicts[(int)maxclients->value];
-    for (i = maxclients->value ; i >= 1  ; i--, e--) {
+	i = (int)maxclients->value;
+	e = &g_edicts[i];
+    for ( ; i >= 1 ; i--, e--) {
         client = &game.clients[i - 1];
         // the first couple seconds of server time can involve a lot of
         // freeing and allocating, so relax the replacement policy
@@ -304,7 +305,9 @@ edict_t *Get_NewClient(void)
             return e;
         }
     }
-    gi.error("ED_Alloc: no free edicts shit");
+    
+	// gi.error("ED_Alloc: no free edicts shit");  // tsmod: no need to abort; caller handles NULL return value
+
     return NULL;
 }
 
@@ -381,7 +384,7 @@ void InitializeBot(edict_t *ent, int botindex)
     gclient_t   *client;
     char        pinfo[200];
     int         index;
-    int         i;
+    // int         i;
 
     index = ent - g_edicts - 1;
     ent->client = &game.clients[index];
@@ -613,12 +616,13 @@ qboolean SpawnBot(int i)
 //return false;
 
     if (Get_NumOfPlayer() >= game.maxclients) {
-        gi.cprintf(NULL, PRINT_HIGH, "Can't add bots\n");
+        gi.cprintf(NULL, PRINT_HIGH, "Can't add bot (maxclients reached)\n");
         return false;
     }
 
     bot = Get_NewClient();
     if (bot == NULL) {
+        gi.cprintf(NULL, PRINT_HIGH, "Can't add bot (no free edicts)\n");
         return false;
     }
 

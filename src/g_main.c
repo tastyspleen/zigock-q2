@@ -495,7 +495,7 @@ void G_RunFrame(void)
 
     vec3_t  v, vv;
     qboolean haveflag;
-    gitem_t *item;
+    // gitem_t *item;
 
     level.framenum++;
     level.time = level.framenum * FRAMETIME;
@@ -509,6 +509,8 @@ void G_RunFrame(void)
         ExitLevel();
         return;
     }
+
+	G_EmergencyMaintainMinimumFreeEntityPool(EMERGENCY_ENTITY_FREE_POOL_SIZE);  // tsmod
 
 //
 // Bot Spawning

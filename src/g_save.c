@@ -210,6 +210,8 @@ void InitGame(void)
 
     // initialize all entities for this game
     game.maxentities = maxentities->value;
+	if (game.maxentities > MAX_EDICTS)  // tsmod: enforce hard protocol limit
+		game.maxentities = MAX_EDICTS;
     g_edicts =  gi.TagMalloc(game.maxentities * sizeof(g_edicts[0]), TAG_GAME);
     globals.edicts = g_edicts;
     globals.max_edicts = game.maxentities;

@@ -127,6 +127,9 @@ void ThrowGib(edict_t *self, char *gibname, int damage, int type)
     vec3_t  size;
     float   vscale;
 
+	if (G_EntityUseNearEmergencyThreshold())  // tsmod
+		return;
+
     gib = G_Spawn();
 
     VectorScale(self->size, 0.5, size);
@@ -169,6 +172,9 @@ void ThrowHead(edict_t *self, char *gibname, int damage, int type)
 {
     vec3_t  vd;
     float   vscale;
+
+	if (G_EntityUseNearEmergencyThreshold())  // tsmod
+		return;
 
     self->s.skinnum = 0;
     self->s.frame = 0;
@@ -215,6 +221,9 @@ void ThrowHead2(edict_t *self, char *gibname, int damage, int type)
     vec3_t  vd;
     float   vscale;
 
+	if (G_EntityUseNearEmergencyThreshold())  // tsmod
+		return;
+
     self->s.skinnum = 0;
     self->s.frame = 0;
     VectorClear(self->mins);
@@ -257,6 +266,9 @@ void ThrowClientHead(edict_t *self, int damage)
 {
     vec3_t  vd;
     char    *gibname;
+
+	if (G_EntityUseNearEmergencyThreshold())  // tsmod
+		return;
 
     if (rand() & 1) {
         gibname = "models/objects/gibs/head2/tris.md2";
