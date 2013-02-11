@@ -191,6 +191,7 @@
     <ClInclude Include="..\src\m_player.h" />
     <ClInclude Include="..\src\p_menu.h" />
     <ClInclude Include="..\src\q_shared.h" />
+    <ClInclude Include="..\src\tsmod_flags.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
