@@ -1520,6 +1520,7 @@ void BotEndServerFrame(edict_t *ent)
 	//
 //  xyspeed = sqrt(ent->velocity[0]*ent->velocity[0] + ent->velocity[1]*ent->velocity[1]);
 	VectorSubtract(ent->s.origin, ent->s.old_origin, v);
+//gi.cprintf(NULL,PRINT_HIGH,"BESF: velZ (%f) oldvelZ (%f) ground=%d\n", ent->velocity[2], ent->client->oldvelocity[2], !!ent->groundentity); // BOTDBG
 	v[2] = 0;
 	xyspeed = VectorLength(v) * 10;
 

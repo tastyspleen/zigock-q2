@@ -2510,6 +2510,7 @@ void Bots_Move_NORM(edict_t *ent)
 
 	qboolean    ladderdrop;
 
+//gi.cprintf(NULL,PRINT_HIGH,"BMVN1: z=%f vz=%f ground %d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 
 	trace_priority = TRP_NORMAL;    //trace on
 
@@ -2533,6 +2534,7 @@ void Bots_Move_NORM(edict_t *ent)
 			v[2] -= 1.0;
 			rs_trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, v, ent, MASK_BOTSOLIDX);
 			if (!rs_trace.allsolid && !rs_trace.startsolid) {
+//gi.cprintf(NULL,PRINT_HIGH,"BMVN2: z=%f vz=%f ground %d -> %d startsolid=%d frac=%f\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity, !!rs_trace.ent, (int)rs_trace.startsolid, rs_trace.fraction); // BOTDBG
 				ent->groundentity = rs_trace.ent;
 			}
 		}
@@ -6241,4 +6243,6 @@ VCHCANSEL_L:
 
 	gi.linkentity(ent);
 	G_TouchTriggers(ent);
+
+//gi.cprintf(NULL,PRINT_HIGH,"BMVN9: z=%f vz=%f ground %d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 }

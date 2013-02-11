@@ -500,6 +500,8 @@ void G_RunFrame(void)
 	level.framenum++;
 	level.time = level.framenum * FRAMETIME;
 
+//gi.cprintf(NULL,PRINT_HIGH,"RUNF1: num=%d ****************\n", level.framenum); // BOTDBG
+
 	// choose a client for monsters to target this frame
 //  AI_SetSightClient ();
 
@@ -545,6 +547,7 @@ void G_RunFrame(void)
 		if ((ent->groundentity) && (ent->groundentity->linkcount != ent->groundentity_linkcount)) {
 			ent->groundentity = NULL;
 			if (!(ent->flags & (FL_SWIM | FL_FLY)) && (ent->svflags & SVF_MONSTER)) {
+//gi.cprintf(NULL,PRINT_HIGH,"RUNF2: z=%f vz=%f\n", ent->s.origin[2], ent->velocity[2]); // BOTDBG
 				M_CheckGround(ent);
 			}
 		}
@@ -622,5 +625,7 @@ void G_RunFrame(void)
 
 	// build the playerstate_t structures for all players
 	ClientEndServerFrames();
+
+//gi.cprintf(NULL,PRINT_HIGH,"RUNF9: ***********************\n", level.framenum); // BOTDBG
 }
 

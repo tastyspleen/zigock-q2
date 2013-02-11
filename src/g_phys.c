@@ -197,6 +197,8 @@ int SV_FlyMove(edict_t *ent, float time, int mask)
 
 		trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, end, ent, mask);
 
+//if(ent->svflags & SVF_MONSTER){ gi.cprintf(NULL,PRINT_HIGH,"SVFM1: z=%f vz=%f allsolid=%d startsolid=%d frac=%f\n", ent->s.origin[2], ent->velocity[2], (int)trace.allsolid, (int)trace.startsolid, trace.fraction); } // BOTDBG
+
 		if (trace.allsolid) {
 			// entity is trapped in another solid
 			VectorCopy(vec3_origin, ent->velocity);
@@ -219,6 +221,7 @@ int SV_FlyMove(edict_t *ent, float time, int mask)
 		if (trace.plane.normal[2] > 0.7) {
 			blocked |= 1;       // floor
 			if (hit->solid == SOLID_BSP) {
+//if(ent->svflags & SVF_MONSTER){ gi.cprintf(NULL,PRINT_HIGH,"SVFM2: z=%f vz=%f ground %d -> %d startsolid=%d frac=%f\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity, !!trace.ent, (int)trace.startsolid, trace.fraction); } // BOTDBG
 				ent->groundentity = hit;
 				ent->groundentity_linkcount = hit->linkcount;
 			}
@@ -337,7 +340,9 @@ SV_AddGravity
 void SV_AddGravity(edict_t *ent)
 {
 //  gi.bprintf(PRINT_HIGH,"gravadd %f\n",ent->gravity * sv_gravity->value * FRAMETIME);
+//if(ent->svflags & SVF_MONSTER){ gi.cprintf(NULL,PRINT_HIGH,"SVGR1: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); } // BOTDBG
 	ent->velocity[2] -= ent->gravity * sv_gravity->value * FRAMETIME;
+//if(ent->svflags & SVF_MONSTER){ gi.cprintf(NULL,PRINT_HIGH,"SVGR9: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); } // BOTDBG
 }
 
 /*
@@ -713,6 +718,12 @@ void SV_Physics_Toss(edict_t *ent)
 // regular thinking
 	SV_RunThink(ent);
 
+	// tsmod: SV_RunThink may call Bot_Think, which may respawn bot, which may reassign movetype
+	// so bail out if SV_Physics_Toss (being applied to our formerly dead body) is no longer appropriate
+	if (ent->movetype == MOVETYPE_STEP || ent->movetype == MOVETYPE_WALK || ent->movetype == MOVETYPE_NONE) {
+		return;
+	}
+
 	// if not a team captain, so movement will be handled elsewhere
 	if (ent->flags & FL_TEAMSLAVE) {
 		return;
@@ -893,11 +904,18 @@ void SV_Physics_Step(edict_t *ent)
 
 	// airborn monsters should always check for ground
 //  if (!ent->groundentity)
+
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS1: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
+
 	M_CheckGround(ent);
+
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS2: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 
 	groundentity = ent->groundentity;
 
 	SV_CheckVelocity(ent);
+
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS3: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 
 	if (groundentity) {
 		wasonground = true;
@@ -912,16 +930,19 @@ void SV_Physics_Step(edict_t *ent)
 	// add gravity except:
 	//   flying monsters
 	//   swimming monsters who are in the water
-	if (! wasonground)
-		if (!(ent->flags & FL_FLY))
+	if (! wasonground) {
+		if (!(ent->flags & FL_FLY)) {
 			if (!((ent->flags & FL_SWIM) && (ent->waterlevel > 2))) {
 				if (ent->velocity[2] < sv_gravity->value * -0.1) {
 					hitsound = true;
 				}
 				if (ent->waterlevel == 0) {
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS4: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 					SV_AddGravity(ent);
 				}
 			}
+		}
+	}
 
 	// friction for flying monsters that have been given vertical velocity
 	if ((ent->flags & FL_FLY) && (ent->velocity[2] != 0)) {
@@ -951,6 +972,8 @@ void SV_Physics_Step(edict_t *ent)
 	}
 
 //  if(ent->client){if(ent->client->ctf_grapple) if(ent->client->ctf_grapplestate == CTF_GRAPPLE_STATE_FLY) ent->velocity[2] = 0;}
+
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS5: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 
 	if (ent->velocity[2] || ent->velocity[1] || ent->velocity[0]) {
 		// apply friction
@@ -986,6 +1009,8 @@ void SV_Physics_Step(edict_t *ent)
 		else {
 			mask = MASK_SOLID;
 		}
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS6: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
+
 		SV_FlyMove(ent, FRAMETIME, mask);
 
 		gi.linkentity(ent);
@@ -1027,7 +1052,9 @@ void SV_Physics_Step(edict_t *ent)
 	}
 
 // regular thinking
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS8: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 	SV_RunThink(ent);
+//gi.cprintf(NULL,PRINT_HIGH,"SVPS9: z=%f vz=%f ground=%d\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity); // BOTDBG
 }
 
 //============================================================================

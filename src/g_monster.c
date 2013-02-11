@@ -169,6 +169,7 @@ void M_CheckGround(edict_t *ent)
 	trace_t     trace, tracep;
 
 	if (ent->flags & (FL_SWIM | FL_FLY)) {
+//gi.cprintf(NULL,PRINT_HIGH,"CHKG: bail: swim/fly\n"); // BOTDBG
 		return;
 	}
 
@@ -188,6 +189,7 @@ void M_CheckGround(edict_t *ent)
 	if (ent->velocity[2] > 100) {
 		ent->groundentity = NULL;
 //gi.bprintf(PRINT_HIGH,"ogeeX\n");
+//gi.cprintf(NULL,PRINT_HIGH,"CHKG: bail: Z velocity\n"); // BOTDBG
 		return;
 	}
 
@@ -199,12 +201,15 @@ void M_CheckGround(edict_t *ent)
 	trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_BOTSOLID/*CONTENTS_SOLID|CONTENTS_WINDOW|CONTENTS_MONSTER*/);
 	//MASK_BOTSOLID /*MASK_PLAYERSOLID*/);
 
+//gi.cprintf(NULL,PRINT_HIGH,"CHKG: trace: z=%f vz=%f allsolid=%d startsolid=%d frac=%f\n", ent->s.origin[2], ent->velocity[2], (int)trace.allsolid, (int)trace.startsolid, trace.fraction); // BOTDBG
+
 	// check steepness
 	if (trace.fraction == 1.0 /*trace.plane.normal[2] < 0.7*/
 	    && (!trace.startsolid && !trace.allsolid)) {
 		ent->groundentity = NULL;
 //      ent->groundentity_linkcount = trace.ent->linkcount;
 //gi.bprintf(PRINT_HIGH,"NULLKUN\n");
+//gi.cprintf(NULL,PRINT_HIGH,"CHKG: bail: steep: startsolid=%d frac=%f\n", (int)trace.startsolid, trace.fraction); // BOTDBG
 		return;
 	}
 
@@ -221,6 +226,7 @@ void M_CheckGround(edict_t *ent)
 				if (tracep.ent->classname[0] == 'f' /*&& tracep.ent->classname[5] == 'r'*/) {
 					VectorCopy(tracep.endpos, ent->s.origin);
 //                  gi.bprintf(PRINT_HIGH,"ogee done\n");
+//gi.cprintf(NULL,PRINT_HIGH,"CHKG1: ground %d -> %d startsolid=%d frac=%f\n", !!ent->groundentity, !!tracep.ent, (int)tracep.startsolid, tracep.fraction); // BOTDBG
 					ent->groundentity = tracep.ent;
 					/*if(tracep.ent->classname[5] == 'r')*/
 					ent->groundentity_linkcount = tracep.ent->linkcount;
@@ -243,6 +249,7 @@ void M_CheckGround(edict_t *ent)
 			ent->client->zc.ground_slope = trace.plane.normal[2];
 		}
 		VectorCopy(trace.endpos, ent->s.origin);
+//gi.cprintf(NULL,PRINT_HIGH,"CHKG2: ground %d -> %d startsolid=%d frac=%f\n", !!ent->groundentity, !!trace.ent, (int)trace.startsolid, trace.fraction); // BOTDBG
 		ent->groundentity = trace.ent;
 		ent->groundentity_linkcount = trace.ent->linkcount;
 		//  ent->velocity[2] = 0;

@@ -2279,6 +2279,7 @@ void ClientThink(edict_t *ent, usercmd_t *ucmd)
 		ent->watertype = pm.watertype;
 		ent->groundentity = pm.groundentity;
 		if (pm.groundentity) {
+//if(ent->svflags & SVF_MONSTER){ gi.cprintf(NULL,PRINT_HIGH,"SVCT: ground=%d\n", !!ent->groundentity); } // BOTDBG
 			ent->groundentity_linkcount = pm.groundentity->linkcount;
 		}
 

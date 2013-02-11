@@ -322,6 +322,8 @@ void Bot_Think(edict_t *self)
 {
 	gclient_t   *client;
 
+//gi.cprintf(NULL,PRINT_HIGH,"BTHK1: z=%f vz=%f link=%d mlink=%d dead=%d\n", self->s.origin[2], self->velocity[2], self->linkcount, self->monsterinfo.linkcount, self->deadflag); // BOTDBG
+
 	if (self->linkcount != self->monsterinfo.linkcount) {
 //      self->monsterinfo.linkcount = self->linkcount;
 		M_CheckGround(self);
@@ -353,7 +355,9 @@ void Bot_Think(edict_t *self)
 		}
 	}
 	else {
+//gi.cprintf(NULL,PRINT_HIGH,"BTHK2: z=%f vz=%f link=%d mlink=%d dead=%d\n", self->s.origin[2], self->velocity[2], self->linkcount, self->monsterinfo.linkcount, self->deadflag); // BOTDBG
 		Bots_Move_NORM(self);
+//gi.cprintf(NULL,PRINT_HIGH,"BTHK3: z=%f vz=%f link=%d mlink=%d dead=%d\n", self->s.origin[2], self->velocity[2], self->linkcount, self->monsterinfo.linkcount, self->deadflag); // BOTDBG
 		if (!self->inuse) {
 			return;    //removed botself
 		}
@@ -362,12 +366,15 @@ void Bot_Think(edict_t *self)
 
 		ClientBeginServerFrame(self);
 	}
+//gi.cprintf(NULL,PRINT_HIGH,"BTHK4: z=%f vz=%f link=%d mlink=%d dead=%d\n", self->s.origin[2], self->velocity[2], self->linkcount, self->monsterinfo.linkcount, self->deadflag); // BOTDBG
 	if (self->linkcount != self->monsterinfo.linkcount) {
 //      self->monsterinfo.linkcount = self->linkcount;
 		M_CheckGround(self);
 	}
 	M_CatagorizePosition(self);
+//gi.cprintf(NULL,PRINT_HIGH,"BTHK5: z=%f vz=%f link=%d mlink=%d dead=%d\n", self->s.origin[2], self->velocity[2], self->linkcount, self->monsterinfo.linkcount, self->deadflag); // BOTDBG
 	BotEndServerFrame(self);
+//gi.cprintf(NULL,PRINT_HIGH,"BTHK6: z=%f vz=%f link=%d mlink=%d dead=%d\n", self->s.origin[2], self->velocity[2], self->linkcount, self->monsterinfo.linkcount, self->deadflag); // BOTDBG
 	self->nextthink = level.time + FRAMETIME;
 	return;
 }
@@ -430,19 +437,38 @@ void InitializeBot(edict_t *ent, int botindex)
 		                   client->pers.netname);
 }
 
+
+static qboolean moveEntUntilNotStartsolid(edict_t *ent, int contentmask, float step_x, float step_y, float step_z, int max_steps)
+{
+	trace_t trace;
+
+	while (max_steps-- > 0) {
+		trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, ent, contentmask);
+		if (! trace.startsolid) {
+			return true;
+		}
+
+		ent->s.origin[0] += step_x;
+		ent->s.origin[1] += step_y;
+		ent->s.origin[2] += step_z;
+	}
+
+	return false;
+}
+
 void PutBotInServer(edict_t *ent)
 {
-	edict_t     *touch[MAX_EDICTS];
-	int         i, j, entcount;
+//	edict_t     *touch[MAX_EDICTS];
+	int         i, j;  //, entcount;
 	gitem_t     *item;
 	gclient_t   *client;
 	vec3_t  spawn_origin, spawn_angles;
-	trace_t     rs_trace;
-
-
+//	trace_t     rs_trace;
 	zgcl_t      *zc;
 
 	zc = &ent->client->zc;
+
+//gi.cprintf(NULL,PRINT_HIGH,"PBIS: *****************************************************************\n"); // BOTDBG
 
 //test
 //  item = FindItem("Trap");
@@ -521,21 +547,54 @@ void PutBotInServer(edict_t *ent)
 	ent->prethink = NULL;
 	ent->think = Bot_Think;
 	ent->nextthink = level.time + FRAMETIME;
-	ent->svflags /*|*/ = SVF_MONSTER ;
+	ent->svflags = 0;  // temporary, for SelectSpawnPoint
 	ent->s.renderfx = 0;
 	ent->s.effects = 0;
 
-	SelectSpawnPoint(ent, spawn_origin, spawn_angles);
+	SelectSpawnPoint(ent, spawn_origin, spawn_angles);  // warning, adds extra height if SVF_MONSTER
 	VectorCopy(spawn_origin, ent->s.origin);
 	VectorCopy(spawn_angles, ent->s.angles);
+
+	ent->s.origin[2] += 1;  // make sure off ground
+	VectorCopy(ent->s.origin, ent->s.old_origin);
+	ent->groundentity = NULL;
+
+	ent->svflags = SVF_MONSTER;
+
+	{
+		qboolean success = moveEntUntilNotStartsolid(ent, MASK_BOTSOLIDX, 0, 0, 1, 16);  // try straight up first
+		if (!success) {
+			vec3_t forward;
+
+			VectorCopy(ent->s.old_origin, ent->s.origin);
+			AngleVectors(ent->s.angles, forward, NULL, NULL);
+			success = moveEntUntilNotStartsolid(ent, MASK_BOTSOLIDX, forward[0], forward[1], 1, 16);  // try up plus spawn angle
+
+			if (!success) {
+				VectorCopy(ent->s.old_origin, ent->s.origin);
+
+				gi.dprintf("PutBotInServer: attempt to fix bot spawn startsolid failed (%f,%f,%f)\n",
+							ent->s.old_origin[0], ent->s.old_origin[1], ent->s.old_origin[2]);
+			}
+		}
+
+		if (success) {
+			VectorCopy(ent->s.origin, ent->s.old_origin);
+		}
+	}
+
+/*
 	spawn_origin[2] -= 300;
 	rs_trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, spawn_origin, ent, MASK_SOLID);
 	if (!rs_trace.allsolid) {
 		VectorCopy(rs_trace.endpos, ent->s.origin);
 	}
-	VectorSet(ent->velocity, 0, 0, 0);
-	ent->moveinfo.speed = 0;
 	ent->groundentity = rs_trace.ent;
+*/
+
+	VectorSet(ent->velocity, 0, 0, 0);
+	VectorSet(ent->client->oldvelocity, 0, 0, 0);
+	ent->moveinfo.speed = 0;
 	ent->client->ps.pmove.pm_flags &= ~PMF_DUCKED;
 
 	Set_BotAnim(ent, ANIM_BASIC, FRAME_run1, FRAME_run6);
@@ -576,9 +635,15 @@ void PutBotInServer(edict_t *ent)
 		gi.WriteByte(MZ_RESPAWN);
 		gi.multicast(ent->s.origin, MULTICAST_PVS);
 	}
+
+/*
 	gi.linkentity(ent);
+*/
+/*
 	VectorAdd(spawn_origin, ent->mins, ent->absmin);
 	VectorAdd(spawn_origin, ent->maxs, ent->absmax);
+*/
+/*
 	entcount = gi.BoxEdicts(ent->absmin , ent->absmax, touch, MAX_EDICTS, AREA_SOLID);
 	while (entcount-- > 0) {
 		if (Q_stricmp(touch[entcount]->classname, "player") == 0)
@@ -586,15 +651,28 @@ void PutBotInServer(edict_t *ent)
 				T_Damage(touch[entcount], ent, ent, vec3_origin, touch[entcount]->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 			}
 	}
+*/
 
 	if (ctf->value) {
 		CTFPlayerResetGrapple(ent);
 		client->zc.ctfstate = CTFS_OFFENCER;
 	}
 
+	if (!KillBox(ent)) {
+		// could't spawn in?
+	}
 
 	gi.linkentity(ent);
 	G_TouchTriggers(ent);
+
+/*
+{ // BOTDBG
+trace_t rs_trace;
+rs_trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, ent, MASK_BOTSOLIDX);
+gi.cprintf(NULL,PRINT_HIGH,"PBIS: done: org==old? %d startsolid=%d link=%d mlink=%d\n", VectorCompare(ent->s.origin, ent->s.old_origin), (int)rs_trace.startsolid, ent->linkcount, ent->monsterinfo.linkcount); // BOTDBG
+}
+*/
+
 }
 
 //----------------------------------------------------------------
@@ -628,6 +706,9 @@ qboolean SpawnBot(int i)
 
 	InitializeBot(bot , i);
 	PutBotInServer(bot);
+
+//	meansOfDeath = MOD_SUICIDE;  // BOTDBG
+//	bot->die(bot, bot, bot, 10000, bot->s.origin);  // BOTDBG
 
 	j = targetindex;
 	if (chedit->value) {
