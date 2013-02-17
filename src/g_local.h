@@ -1241,6 +1241,11 @@ struct edict_s {
 	int         orders;
 };
 
+
+#define GROUND_TEST_EPSILON		0.25
+#define ENT_IS_BOT(ent)			((ent)->client && ((ent)->svflags & SVF_MONSTER))
+
+
 //ZOID
 #include "g_ctf.h"
 //ZOID

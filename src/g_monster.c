@@ -134,7 +134,7 @@ void M_CheckGround (edict_t *ent)
 // if the hull point one-quarter unit down is solid the entity is on ground
     point[0] = ent->s.origin[0];
     point[1] = ent->s.origin[1];
-    point[2] = ent->s.origin[2] - 0.25;
+    point[2] = ent->s.origin[2] - GROUND_TEST_EPSILON;
 
     if(!deathmatch->value) trace = gi.trace (ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_MONSTERSOLID);
     else trace = gi.trace (ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_PLAYERSOLID);
@@ -196,9 +196,9 @@ void M_CheckGround(edict_t *ent)
 // if the hull point one-quarter unit down is solid the entity is on ground
 	point[0] = ent->s.origin[0];
 	point[1] = ent->s.origin[1];
-	point[2] = ent->s.origin[2] - 0.25;
+	point[2] = ent->s.origin[2] - GROUND_TEST_EPSILON;
 
-	trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_BOTSOLID/*CONTENTS_SOLID|CONTENTS_WINDOW|CONTENTS_MONSTER*/);
+	trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_BOTGROUND /*MASK_BOTSOLID*/ /*CONTENTS_SOLID|CONTENTS_WINDOW|CONTENTS_MONSTER*/);
 	//MASK_BOTSOLID /*MASK_PLAYERSOLID*/);
 
 //gi.cprintf(NULL,PRINT_HIGH,"CHKG: trace: z=%f vz=%f allsolid=%d startsolid=%d frac=%f\n", ent->s.origin[2], ent->velocity[2], (int)trace.allsolid, (int)trace.startsolid, trace.fraction); // BOTDBG
@@ -221,7 +221,7 @@ void M_CheckGround(edict_t *ent)
 			VectorCopy(ent->s.origin, stp);
 //          gi.bprintf(PRINT_HIGH,"ogeeY\n");
 			stp[2] += 24;
-			tracep = gi.trace(stp, v1, v2, point, ent, MASK_BOTSOLID /*MASK_PLAYERSOLID*/);
+			tracep = gi.trace(stp, v1, v2, point, ent, MASK_BOTGROUND  /*MASK_BOTSOLID*/ /*MASK_PLAYERSOLID*/);
 			if (tracep.ent && !tracep.allsolid /*&& !tracep.startsolid*/) {
 				if (tracep.ent->classname[0] == 'f' /*&& tracep.ent->classname[5] == 'r'*/) {
 					VectorCopy(tracep.endpos, ent->s.origin);

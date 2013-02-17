@@ -364,6 +364,10 @@ extern edict_t     *LaserIndex[MAX_LASERINDEX];
 extern edict_t     *ExplIndex[MAX_EXPLINDEX];
 //
 
+//tsmod: Have bots chill out a bit after encountering a non-vertical trigger_push
+#define BOT_PUSH_IDLE_TIME_AIR		2.5  //tsmod: somewhat arbitrary, but works for tltf.bsp
+#define BOT_PUSH_IDLE_TIME_GROUND	0.5  //tsmod: somewhat arbitrary, but works for stellar.bsp
+
 
 extern  int         cumsindex;
 extern  int         targetindex;        //debugtarget

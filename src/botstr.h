@@ -53,6 +53,8 @@ typedef struct zgcl_s {
 	float       nextcheck;      //checking time
 	vec3_t      pold_origin;    //old origin
 	vec3_t      pold_angles;    //old angles
+	float		push_time;		//tsmod: level.time when trigger_push affected bot
+	vec3_t		push_norm;		//tsmod: velocity normal imparted by last trigger_push
 
 	//target object shot
 	qboolean    objshot;

@@ -2092,6 +2092,7 @@ qboolean TargetJump(edict_t *ent, vec3_t tpos)
 	return false;
 }
 
+// tsmod: NOTE: apparently TargetJump_Turbo is meant for extra-height jumps, not for speed jumps
 qboolean TargetJump_Turbo(edict_t *ent, vec3_t tpos)
 {
 	zgcl_t  *zc;
@@ -2114,6 +2115,9 @@ qboolean TargetJump_Turbo(edict_t *ent, vec3_t tpos)
 
 	//if on hazard object cause error
 	if (!HazardCheck(ent, tpos)) {
+#ifdef _DEBUG
+//		gi.bprintf(PRINT_HIGH, "TargetJump_Turbo: false: hazard=%s\n", ent->classname);
+#endif
 		return false;
 	}
 
@@ -2164,10 +2168,18 @@ qboolean TargetJump_Turbo(edict_t *ent, vec3_t tpos)
 //      ent->s.frame = FRAME_jump1-1;
 //      ent->client->anim_end = FRAME_jump6;
 //      ent->client->anim_priority = ANIM_JUMP;
+#ifdef _DEBUG
+//		gi.bprintf(PRINT_HIGH, "TargetJump_Turbo: true: len=%f\n", l);
+#endif
 		return true;
 	}
+
+#ifdef _DEBUG
+//	gi.bprintf(PRINT_HIGH, "TargetJump_Turbo: false: len=%f\n", l);
+#endif
 	return false;
 }
+
 qboolean TargetJump_Chk(edict_t *ent, vec3_t tpos, float defvel)
 {
 	zgcl_t  *zc;
@@ -2467,6 +2479,7 @@ int Get_KindWeapon(gitem_t  *it)
 	}
 }
 
+
 //-----------------------------------------------------------------------------------------
 //
 //
@@ -2527,18 +2540,46 @@ void Bots_Move_NORM(edict_t *ent)
 		T_Damage(ent, ent, ent, ent->s.origin, ent->s.origin, ent->s.origin, 100 , 1, 0, MOD_CRUSH);
 	}
 
-
 	if (VectorCompare(ent->s.origin, ent->s.old_origin)) {
 		if (ent->groundentity == NULL && !ent->waterlevel) {
 			VectorCopy(ent->s.origin, v);
-			v[2] -= 1.0;
-			rs_trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, v, ent, MASK_BOTSOLIDX);
+			v[2] -= GROUND_TEST_EPSILON;
+			rs_trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, v, ent, MASK_BOTGROUND);
 			if (!rs_trace.allsolid && !rs_trace.startsolid) {
 //gi.cprintf(NULL,PRINT_HIGH,"BMVN2: z=%f vz=%f ground %d -> %d startsolid=%d frac=%f\n", ent->s.origin[2], ent->velocity[2], !!ent->groundentity, !!rs_trace.ent, (int)rs_trace.startsolid, rs_trace.fraction); // BOTDBG
 				ent->groundentity = rs_trace.ent;
 			}
 		}
 	}
+
+	// tsmod: chill out for a bit if just pushed
+	if ((ent->client->zc.push_time > 0)
+			&& (	((ent->groundentity == NULL) && (ent->client->zc.push_time + BOT_PUSH_IDLE_TIME_AIR) > level.time)
+				||	((ent->groundentity != NULL) && (ent->client->zc.push_time + BOT_PUSH_IDLE_TIME_GROUND) > level.time)
+				)) {
+
+		// unless push was purely vertical, we assume it's taking us somewhere specific
+		// and we shouldn't do bot movement for awhile
+		qboolean pure_vertical = (ent->client->zc.push_norm[2] > 0.95);
+		if (! pure_vertical) {
+
+			// on stellar.bsp, there's a "fan" that pushes players/bots laterally into another room
+			// If we're on the ground, we allow the bot movement code to fight the push sometimes anyway,
+			// as while allowing bot movement all the time looks bad, never allowing movement leads to
+			// occasionally becoming stuck. :/
+			qboolean move_regardless = (ent->groundentity != NULL) && (random() >= 0.80);
+			if (! move_regardless) {
+
+//gi.bprintf(PRINT_HIGH, "bot %d chill: vel=(%f,%f,%f) len=%f ground=%s\n", (int)(ent - g_edicts), ent->velocity[0], ent->velocity[1], ent->velocity[2], VectorLength(ent->velocity), ent->groundentity ? ent->groundentity->classname : "NULL");
+
+				gi.linkentity(ent);
+				G_TouchTriggers(ent);
+
+				return;
+			}
+		}
+	}
+
 	//  VectorCopy(ent->s.origin,Origin);
 //  VectorCopy(ent->velocity,Velocity);
 //  OYaw = ent->s.angles[YAW];
@@ -2566,6 +2607,7 @@ void Bots_Move_NORM(edict_t *ent)
 			return;
 		}
 	}
+
 	//--------------------------------------------------------------------------------------
 	//get JumpMax
 	if (JumpMax == 0) {
@@ -2585,6 +2627,7 @@ void Bots_Move_NORM(edict_t *ent)
 
 
 	    }*/
+
 	//--------------------------------------------------------------------------------------
 	//target set
 	if (!zc->havetarget && zc->route_trace) {
@@ -4920,7 +4963,7 @@ GOMOVE:
 	//jumping   ======================================================
 	if (!ent->groundentity && !ent->waterlevel && !ent->client->zc.trapped) {
 		if (ent->velocity[2] > VEL_BOT_JUMP && !(zc->zcstate & STS_SJMASKEXW)) {
-			ent->velocity[2] = VEL_BOT_JUMP;
+			// ent->velocity[2] = VEL_BOT_JUMP;  // tsmod: removed: this was killing vertical jump pad velocity
 		}
 
 		k = false;
@@ -4943,12 +4986,13 @@ GOMOVE:
 				}
 				//turbo
 				if (!ent->waterlevel && ent->s.origin[2] > ent->s.old_origin[2]
-				    && zc->route_trace
-				    && !(zc->zcstate & STS_LADDERUP)
-				    && !(zc->zcstate & STS_SJMASK)
-				    && (zc->routeindex + 1) < CurrentIndex
-				    && ent->velocity[2] >= 100
-				    && ent->velocity[2] < (100 + ent->gravity * sv_gravity->value * FRAMETIME)) {
+						&& zc->route_trace
+						&& !(zc->zcstate & STS_LADDERUP)
+						&& !(zc->zcstate & STS_SJMASK)
+						&& (zc->routeindex + 1) < CurrentIndex
+						&& ent->velocity[2] >= 100
+						&& ent->velocity[2] < (100 + ent->gravity * sv_gravity->value * FRAMETIME)) {
+
 					Get_RouteOrigin(zc->routeindex , v);
 					Get_RouteOrigin(zc->routeindex + 1, vv);
 					k = 0;
@@ -5031,12 +5075,13 @@ GOMOVE:
 				}
 				//turbo
 				if (!ent->waterlevel && ent->s.origin[2] > ent->s.old_origin[2]
-				    && zc->route_trace
-				    && !(zc->zcstate & STS_LADDERUP)
-				    && !(zc->zcstate & STS_SJMASK)
-				    && (zc->routeindex + 1) < CurrentIndex
-				    && ent->velocity[2] >= 100
-				    && ent->velocity[2] < (100 + ent->gravity * sv_gravity->value * FRAMETIME)) {
+						&& zc->route_trace
+						&& !(zc->zcstate & STS_LADDERUP)
+						&& !(zc->zcstate & STS_SJMASK)
+						&& (zc->routeindex + 1) < CurrentIndex
+						&& ent->velocity[2] >= 100
+						&& ent->velocity[2] < (100 + ent->gravity * sv_gravity->value * FRAMETIME)) {
+
 					Get_RouteOrigin(zc->routeindex , v);
 					Get_RouteOrigin(zc->routeindex + 1, vv);
 					k = 0;

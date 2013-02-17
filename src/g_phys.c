@@ -174,7 +174,7 @@ int SV_FlyMove(edict_t *ent, float time, int mask)
 	int         numplanes;
 	vec3_t      planes[MAX_CLIP_PLANES];
 	vec3_t      primal_velocity, original_velocity, new_velocity;
-	int         i, j;
+	int         i;  // , j;
 	trace_t     trace;
 	vec3_t      end;
 	float       time_left;
@@ -254,6 +254,11 @@ int SV_FlyMove(edict_t *ent, float time, int mask)
 //
 // modify original_velocity so it parallels all of the clip planes
 //
+
+		VectorCopy(ent->velocity, new_velocity);
+
+#if 0  // tsmod: seems this is preventing sliding and cancels velocity from trigger_push (ruins stellar.bsp)
+
 //numplanes = 0;
 //PON-CTF
 		i = false;
@@ -300,7 +305,10 @@ int SV_FlyMove(edict_t *ent, float time, int mask)
 //ponko
 
 //ponko
-VELC:
+
+#endif // 0 (tsmod)
+
+//VELC:
 		if (i != numplanes) {
 			// go along this plane
 			VectorCopy(new_velocity, ent->velocity);
@@ -316,7 +324,7 @@ VELC:
 			d = DotProduct(dir, ent->velocity);
 			VectorScale(dir, d, ent->velocity);
 		}
-VELCX:
+//VELCX:
 //
 // if original velocity is against the original velocity, stop dead
 // to avoid tiny occilations in sloping corners

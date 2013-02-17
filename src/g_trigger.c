@@ -424,6 +424,15 @@ void trigger_push_touch(edict_t *self, edict_t *other, cplane_t *plane, csurface
 		VectorScale(self->movedir, self->speed * 10, other->velocity);
 
 		if (other->client) {
+			if (ENT_IS_BOT(other)) {
+				other->client->zc.push_time = level.time;
+				VectorNormalize2(other->velocity, other->client->zc.push_norm);
+/* #ifdef _DEBUG
+				gi.bprintf(PRINT_HIGH, "bot %d push:  vel=(%f,%f,%f) len=%f ground=%s\n",
+							(int)(other - g_edicts), other->velocity[0], other->velocity[1], other->velocity[2],
+							VectorLength(other->velocity), other->groundentity ? other->groundentity->classname : "NULL");
+#endif */
+			}
 			// don't take falling damage immediately from this
 			VectorCopy(other->velocity, other->client->oldvelocity);
 			if (other->fly_sound_debounce_time < level.time) {

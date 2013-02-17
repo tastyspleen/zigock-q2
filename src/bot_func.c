@@ -520,6 +520,7 @@ void PutBotInServer(edict_t *ent)
 	ent->max_health = ent->client->pers.max_health;
 	ent->gib_health = -40;
 
+	ent->gravity = 1.0;  // tsmod: can get changed by triggers in tltf.bsp
 	ent->mass = 200;
 	ent->target_ent = NULL;
 	ent->s.frame = 0;
