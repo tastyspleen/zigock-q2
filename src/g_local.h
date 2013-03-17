@@ -1244,7 +1244,7 @@ struct edict_s {
 
 #define GROUND_TEST_EPSILON		0.25
 #define ENT_IS_BOT(ent)			((ent)->client && ((ent)->svflags & SVF_MONSTER))
-
+#define GET_GAMEPATH_STR()  ((strlen(gamepath->string)) == 0 ? GAMEVERSION : gamepath->string)
 
 //ZOID
 #include "g_ctf.h"

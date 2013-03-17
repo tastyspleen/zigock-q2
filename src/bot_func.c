@@ -90,10 +90,10 @@ void Load_BotInfo()
 
 	//botlist value
 	botlist = gi.cvar("botlist", "default", CVAR_SERVERINFO | CVAR_LATCH);
-	gamepath = gi.cvar("game", "0", CVAR_NOSET);
+	gamepath = gi.cvar("game", "", 0);
 
 	//load info
-	sprintf(Buff, ".\\%s\\3ZBconfig.cfg", gamepath->string);
+	sprintf(Buff, "./%s/3zbconfig.cfg", GET_GAMEPATH_STR());
 	fp = fopen(Buff, "rt");
 	if (fp == NULL) {
 		gi.dprintf("3ZB CFG: file not found.\n");
@@ -105,7 +105,7 @@ void Load_BotInfo()
 			if (fgets(Buff, sizeof(Buff), fp) == NULL) {
 				goto MESS_NOTFOUND;
 			}
-			if (!_strnicmp(MessageSection, Buff, strlen(MessageSection))) {
+			if (!Q_strncasecmp(MessageSection, Buff, strlen(MessageSection))) {
 				break;
 			}
 		}
@@ -133,7 +133,7 @@ MESS_NOTFOUND:
 				MessageSection[0] = 0;
 				break;
 			}
-			if (!_strnicmp(MessageSection, Buff, strlen(MessageSection))) {
+			if (!Q_strncasecmp(MessageSection, Buff, strlen(MessageSection))) {
 				break;
 			}
 		}
@@ -145,7 +145,7 @@ MESS_NOTFOUND:
 				if (fgets(Buff, sizeof(Buff), fp) == NULL) {
 					goto BOTLIST_NOTFOUND;
 				}
-				if (!_strnicmp(MessageSection, Buff, strlen(MessageSection))) {
+				if (!Q_strncasecmp(MessageSection, Buff, strlen(MessageSection))) {
 					break;
 				}
 			}

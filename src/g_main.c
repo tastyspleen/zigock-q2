@@ -212,7 +212,7 @@ void Get_NextMap()
 		return;
 	}
 
-	sprintf(Buff, ".\\%s\\3ZBMAPS.LST", gamepath->string);
+	sprintf(Buff, "./%s/3zbmaps.lst", GET_GAMEPATH_STR());
 	fp = fopen(Buff, "r");
 	if (fp == NULL) {
 		return;

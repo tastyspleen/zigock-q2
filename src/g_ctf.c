@@ -3173,10 +3173,10 @@ void CTFSetupNavSpawn()
 	memset(code, 0, 8);
 
 	if (!ctf->value) {
-		sprintf(name, ".\\%s\\chdtm\\%s.chn", gamepath->string, level.mapname);
+		sprintf(name, "./%s/chdtm/%s.chn", GET_GAMEPATH_STR(), level.mapname);
 	}
 	else {
-		sprintf(name, ".\\%s\\chctf\\%s.chf", gamepath->string, level.mapname);
+		sprintf(name, "./%s/chctf/%s.chf", GET_GAMEPATH_STR(), level.mapname);
 	}
 
 	fpout = fopen(name, "rb");

@@ -39,7 +39,6 @@ g_spawn.c \
 g_svcmds.c \
 g_target.c \
 g_trigger.c \
-g_turret.c \
 g_utils.c \
 g_weapon.c \
 m_move.c \
