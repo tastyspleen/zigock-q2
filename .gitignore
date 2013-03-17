@@ -1,5 +1,7 @@
+*.o
 *.opensdf
 *.sdf
+*.so
 *.suo
 *.swp
 *.vcxproj.user
