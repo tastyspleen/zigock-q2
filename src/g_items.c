@@ -1272,7 +1272,7 @@ void Use_Item(edict_t *ent, edict_t *other, edict_t *activator)
 	ent->svflags &= ~SVF_NOCLIENT;
 	ent->use = NULL;
 
-	if (ent->spawnflags & 2) {  // NO_TOUCH
+	if (ent->spawnflags & ITEM_NO_TOUCH) {
 		ent->solid = SOLID_BBOX;
 		ent->touch = NULL;
 	}
@@ -1293,15 +1293,18 @@ droptofloor
 */
 void droptofloor(edict_t *ent)
 {
+	trace_t     tr;
+	vec3_t      dest;
+	float       *v;
+#if 0
 	vec3_t  trmin, trmax, min, mins, maxs;
 	float   i, j, k, yaw;
 
 	gitem_t     *it;        //j
 	edict_t     *it_ent;    //j
 
-	trace_t     tr, trx;
-	vec3_t      dest;
-	float       *v;
+	trace_t     trx;
+#endif // 0
 
 	v = tv(-15, -15, -15);
 	VectorCopy(v, ent->mins);
@@ -1355,20 +1358,22 @@ void droptofloor(edict_t *ent)
 		}
 	}
 
-	if (ent->spawnflags & 2) {  // NO_TOUCH
+	if (ent->spawnflags & ITEM_NO_TOUCH) {
 		ent->solid = SOLID_BBOX;
 		ent->touch = NULL;
 		ent->s.effects &= ~EF_ROTATE;
 		ent->s.renderfx &= ~RF_GLOW;
 	}
 
-	if (ent->spawnflags & 1) {  // TRIGGER_SPAWN
+	if (ent->spawnflags & ITEM_TRIGGER_SPAWN) {
 		ent->svflags |= SVF_NOCLIENT;
 		ent->solid = SOLID_NOT;
 		ent->use = Use_Item;
 	}
 
 	gi.linkentity(ent);
+
+#if 0 // tsmod -- not sure precisely what problem this was solving, but it causes 10000 gi.trace abort warnings on map load
 
 	if (ent->spawnflags & (DROPPED_ITEM | DROPPED_PLAYER_ITEM)) {
 		return;
@@ -1439,6 +1444,7 @@ void droptofloor(edict_t *ent)
 		}
 		VectorCopy(min, ent->moveinfo.start_origin);
 	}
+#endif // 0
 }
 
 /*
