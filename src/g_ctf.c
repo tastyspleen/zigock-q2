@@ -3165,7 +3165,7 @@ void CTFSetupNavSpawn()
 	unsigned int size;
 
 //PONKO
-	spawncycle = level.time + FRAMETIME * 100;
+	spawncycle = level.time + FRAMETIME * 10;
 //PONKO
 	//ƒ‹[ƒg‰Šú‰»
 	CurrentIndex = 0;

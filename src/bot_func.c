@@ -256,7 +256,7 @@ BOTLIST_NOTFOUND:
 	fclose(fp);
 
 	gi.dprintf("%i of Bots is listed.\n", ListedBots);
-	spawncycle = level.time + FRAMETIME * 100;
+	spawncycle = level.time + FRAMETIME * 10;
 }
 
 //----------------------------------------------------------------
@@ -955,6 +955,13 @@ void Bot_LevelChange()
 	}
 
 	SpawnWaitingBots = k;
+
+	if (autospawn->value > 0) {
+		int delta = autospawn->value - SpawnWaitingBots;
+		while (delta-- > 0) {
+			SpawnBotReserving();
+		}
+	}
 }
 //----------------------------------------------------------------
 //
