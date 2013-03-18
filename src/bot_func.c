@@ -938,9 +938,9 @@ void RemoveBot()
 //----------------------------------------------------------------
 void Bot_LevelChange()
 {
-	int i, j, k;
+	int i, k;
 
-	j = 0, k = 0;
+	k = 0;
 
 	for (i = 0; i < MAXBOTS; i++) {
 		if (Bot[i].spflg) {
@@ -948,14 +948,13 @@ void Bot_LevelChange()
 				k++;
 				Bot[i].spflg = BOT_NEXTLEVEL;
 			}
-			j++;
 		}
 	}
 	for (i = 0; i < k; i++) {
 		RemoveBot();
 	}
 
-	SpawnWaitingBots = k;//j;
+	SpawnWaitingBots = k;
 }
 //----------------------------------------------------------------
 //

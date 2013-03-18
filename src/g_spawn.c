@@ -981,6 +981,8 @@ void SpawnEntities(char *mapname, char *entities, char *spawnpoint)
 	memset(LaserIndex, 0, sizeof(LaserIndex));
 //ponko
 
+	Bot_LevelChange();  // tsmod: hooking here, because otherwise breaks horribly when gamemap cmd is used
+
 	skill_level = floor(skill->value);
 	if (skill_level < 0) {
 		skill_level = 0;
