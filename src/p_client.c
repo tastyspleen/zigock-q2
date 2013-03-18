@@ -1521,6 +1521,30 @@ void ClientBegin(edict_t *ent)
 	ClientEndServerFrame(ent);
 }
 
+// <name> must be null-terminated
+static void strip_bot_tag_from_client_name (const char *name, char *dest, int destlen)
+{
+	static const char *bot_tag = "[BOT]";
+	const int bot_tag_len = 5;
+	const char *n = name;
+	char *d = dest;
+	int di = 0;
+
+	while (di < destlen) {
+		int remaining = destlen - di;
+		if (!Q_strncasecmp((char *)bot_tag, (char *)n, bot_tag_len)) {
+			n += bot_tag_len;
+		}
+		else {
+			char ch = *n++;
+			*d++ = ch;
+			if (ch == '\0')
+				break;
+			++di;
+		}
+	}
+}
+
 /*
 ===========
 ClientUserInfoChanged
@@ -1543,7 +1567,18 @@ void ClientUserinfoChanged(edict_t *ent, char *userinfo)
 
 	// set name
 	s = Info_ValueForKey(userinfo, "name");
-	strncpy(ent->client->pers.netname, s, sizeof(ent->client->pers.netname) - 1);
+	{
+		char *name = s;
+		if (! ENT_IS_BOT(ent)) {
+			char name_buf[sizeof(ent->client->pers.netname)];
+			strip_bot_tag_from_client_name(name, name_buf, sizeof(name_buf));
+			if (strlen(name_buf) < 1) {
+				strcpy(name_buf, "BOZO");  // their name was nothing but bot tags?
+			}
+			name = name_buf;
+		}
+		strncpy(ent->client->pers.netname, name, sizeof(ent->client->pers.netname) - 1);
+	}
 
 	// set spectator
 	s = Info_ValueForKey(userinfo, "spectator");

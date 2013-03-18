@@ -411,6 +411,7 @@ void InitializeBot(edict_t *ent, int botindex)
 	sprintf(pinfo, "\\rate\\25000\\msg\\1\\fov\\90\\skin\\%s/%s\\name\\%s\\hand\\0", Bot[botindex].model, Bot[botindex].skin, Bot[botindex].netname);
 	ent->client->resp.ctf_team = Bot[botindex].team; //CTF_TEAM1,CTF_TEAM2
 
+	ent->svflags = SVF_MONSTER;  // CAUTION: ClientUserinfoChanged tests this flag
 	ClientUserinfoChanged(ent, pinfo);
 
 	client->pers.health         = 100;
